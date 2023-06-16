@@ -60,7 +60,6 @@ class MainActivity : ComponentActivity() {
                     composable("home"){
                         MainScreen(navController)
                     }
-
                     navigation("lista", "clientes") {
                         composable("lista") {
                             TelaPrincipalClientes(navController,clientesViewModel)
@@ -74,7 +73,7 @@ class MainActivity : ComponentActivity() {
                         composable("lista"){
                             TelaPrincipalColaboradores()
                         }
-                        composable("criar-editar"){
+                        composable("criar-editar-colaboradores"){
                             FormularioColaborador({})
                         }
                     }
@@ -83,7 +82,7 @@ class MainActivity : ComponentActivity() {
                         composable("lista"){
                             TelaPrincipalObras()
                         }
-                        composable("criar-editar"){
+                        composable("criar-editar-obras"){
                             FormularioObra({}, {})
                         }
                     }

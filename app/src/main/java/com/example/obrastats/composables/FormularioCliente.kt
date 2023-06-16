@@ -36,6 +36,9 @@ import com.example.obrastats.viewmodel.ClientesViewModel
 @Composable
 fun FormularioCliente(navController: NavController, clientesViewModel: ClientesViewModel) {
 
+    val currentIndex: Int? = clientesViewModel.getCurrentIndex();
+
+
     val nomeState = remember { mutableStateOf("") }
     val sexoState = remember { mutableStateOf<String?>(null) }
     val celularState = remember { mutableStateOf("") }
@@ -46,6 +49,16 @@ fun FormularioCliente(navController: NavController, clientesViewModel: ClientesV
     val isEmailTouched = remember { mutableStateOf(false) }
 
     val listaSexos = listOf("Masculino", "Feminino")
+
+    if (currentIndex != null) {
+        val cliente = clientesViewModel.getClientesList()[currentIndex]
+        nomeState.value = cliente.nome
+        sexoState.value = cliente.sexo
+        celularState.value = cliente.celular
+        emailState.value = cliente.email
+        cidadeState.value = cliente.cidade
+        enderecoState.value = cliente.endereco
+    }
 
 
     Scaffold(
@@ -137,17 +150,34 @@ fun FormularioCliente(navController: NavController, clientesViewModel: ClientesV
 
                 Button(
                     onClick = {
-//                        onSubmit(
-//                            Cliente(
-//                                null,
-//                                nomeState.value,
-//                                sexoState.value ?: "",
-//                                celularState.value,
-//                                emailState.value,
-//                                cidadeState.value,
-//                                enderecoState.value
-//                            )
-//                        )
+                        if (currentIndex == null) {
+                            clientesViewModel.addCliente(
+                                Cliente(
+                                    null,
+                                    nomeState.value,
+                                    sexoState.value ?: "",
+                                    celularState.value,
+                                    emailState.value,
+                                    cidadeState.value,
+                                    enderecoState.value
+                                )
+                            )
+                        } else {
+                            clientesViewModel.updateClienteAtIndex(
+                                currentIndex,
+                                Cliente(
+                                    null,
+                                    nomeState.value,
+                                    sexoState.value ?: "",
+                                    celularState.value,
+                                    emailState.value,
+                                    cidadeState.value,
+                                    enderecoState.value
+                                )
+                            )
+                        }
+                        clientesViewModel.changeIndex(null);
+                        navController.navigate("clientes");
                     },
                     enabled = isEmailValid(emailState.value) && nomeState.value.isNotBlank() && celularState.value.isNotBlank() && cidadeState.value.isNotBlank() && enderecoState.value.isNotBlank(),
                     modifier = Modifier.fillMaxWidth()
@@ -173,5 +203,5 @@ fun isEmailValid(email: String): Boolean {
 fun FormularioClientePreview() {
     val clientesViewModel: ClientesViewModel = ClientesViewModel();
     val navController = rememberNavController()
-    FormularioCliente(navController,clientesViewModel )
+    FormularioCliente(navController, clientesViewModel)
 }

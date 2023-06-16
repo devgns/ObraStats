@@ -16,25 +16,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material3.Text
 import androidx.compose.material3.Icon
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.tooling.preview.Preview
 
 
 import com.example.obrastats.classes.Cliente
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ClienteCard(cliente: Cliente) {
+fun ClienteCard(cliente: Cliente, onEditClicked: () -> Unit) {
     Card(
         modifier = Modifier.padding(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Row(
-                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
-            ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = cliente.nome,
                     fontSize = 20.sp,
@@ -42,7 +37,7 @@ fun ClienteCard(cliente: Cliente) {
                     modifier = Modifier.weight(1f)
                 )
                 IconButton(
-                    onClick = { /* Navegar para a tela de edição do cliente */ }
+                    onClick = onEditClicked
                 ) {
                     Icon(
                         imageVector = Icons.Default.Edit,
@@ -59,8 +54,8 @@ fun ClienteCard(cliente: Cliente) {
     }
 }
 
-@Preview
-@Composable
-fun ClienteCardPreview(){
-    ClienteCard(Cliente(null, "Gustavo", "Masculino", "34999999999", "gustavo@email.com", "Uberaba", "Rua Feliz"))
-}
+//@Preview
+//@Composable
+//fun ClienteCardPreview(){
+//    ClienteCard(Cliente(null, "Gustavo", "Masculino", "34999999999", "gustavo@email.com", "Uberaba", "Rua Feliz"))
+//}

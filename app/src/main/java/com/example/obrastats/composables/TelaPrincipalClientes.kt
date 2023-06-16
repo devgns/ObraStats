@@ -50,7 +50,7 @@ fun TelaPrincipalClientes(navController: NavController, clientesViewModel: Clien
                     .padding(paddingValues),
 
             ) {
-                ListaClientes(clientes = clientesViewModel.getClientes())
+                ListaClientes(navController, clientesViewModel)
 
             }
 
