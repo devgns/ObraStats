@@ -25,15 +25,13 @@ import com.example.obrastats.classes.Obra
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ObraFormulario(onSubmit: (Obra) -> Unit) {
+fun FormularioObra(onSubmit: (Obra) -> Unit, onNavigateBack: () -> Unit) {
     val nomeState = remember { mutableStateOf("") }
     val clienteState = remember { mutableStateOf<Cliente?>(null) }
     val cidadeState = remember { mutableStateOf("") }
     val enderecoState = remember { mutableStateOf("") }
 
-    Column(
-        modifier = Modifier.padding(16.dp)
-    ) {
+    Column(modifier = Modifier.padding(16.dp)) {
         Text("Cadastro de Obra", style = TextStyle(fontSize = 20.sp))
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -79,6 +77,7 @@ fun ObraFormulario(onSubmit: (Obra) -> Unit) {
                         enderecoState.value
                     )
                 )
+                onNavigateBack();
             },
             enabled = nomeState.value.isNotBlank() && cidadeState.value.isNotBlank() && enderecoState.value.isNotBlank(),
             modifier = Modifier.fillMaxWidth()
@@ -92,5 +91,5 @@ fun ObraFormulario(onSubmit: (Obra) -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun ObraFormularioPreview() {
-    ObraFormulario({})
+    FormularioObra({}, {})
 }

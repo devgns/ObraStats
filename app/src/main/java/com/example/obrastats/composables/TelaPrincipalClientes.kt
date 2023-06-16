@@ -19,80 +19,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.obrastats.classes.Cliente
+import com.example.obrastats.viewmodel.ClientesViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ClientesMainScreen() {
+fun TelaPrincipalClientes(navController: NavController, clientesViewModel: ClientesViewModel) {
     var showDialog by remember { mutableStateOf(false) }
-    val clientes = listOf(
-        Cliente(
-            id = 1,
-            nome = "Cliente 1",
-            sexo = "Feminino",
-            celular = "34999999999",
-            email = "cliente1@example.com",
-            cidade = "Uberaba",
-            endereco = "Rua A"
-        ),
-        Cliente(
-            id = 2,
-            nome = "Cliente 2",
-            sexo = "Masculino",
-            celular = "34888888888",
-            email = "cliente2@example.com",
-            cidade = "Uberlândia",
-            endereco = "Rua B"
-        ),
-        Cliente(
-            id = 1,
-            nome = "Cliente 1",
-            sexo = "Feminino",
-            celular = "34999999999",
-            email = "cliente1@example.com",
-            cidade = "Uberaba",
-            endereco = "Rua A"
-        ),
-        Cliente(
-            id = 2,
-            nome = "Cliente 3",
-            sexo = "Masculino",
-            celular = "34888888888",
-            email = "cliente2@example.com",
-            cidade = "Uberlândia",
-            endereco = "Rua B"
-        ),
-//        Cliente(
-//            id = 1,
-//            nome = "Cliente 1",
-//            sexo = "Feminino",
-//            celular = "34999999999",
-//            email = "cliente1@example.com",
-//            cidade = "Uberaba",
-//            endereco = "Rua A"
-//        ),
-//        Cliente(
-//            id = 2,
-//            nome = "Cliente 2",
-//            sexo = "Masculino",
-//            celular = "34888888888",
-//            email = "cliente2@example.com",
-//            cidade = "Uberlândia",
-//            endereco = "Rua B"
-//        )
-    )
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(text = "Clientes") },
                 navigationIcon = {
-                    IconButton(onClick = { /* Navegar para a tela anterior */ }) {
+                    IconButton(onClick = { navController.navigate("home") }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
                     }
                 }
@@ -105,7 +50,7 @@ fun ClientesMainScreen() {
                     .padding(paddingValues),
 
             ) {
-                ListaClientes(clientes = clientes)
+                ListaClientes(clientes = clientesViewModel.getClientes())
 
             }
 
@@ -113,13 +58,15 @@ fun ClientesMainScreen() {
         },
     floatingActionButton = {
         FloatingActionButton(
-            onClick = { showDialog = true },
+            onClick = {  navController.navigate("criar-editar-cliente")},
             modifier = Modifier
-                .padding(16.dp)
-                .zIndex(999f)
+                .padding(16.dp),
 
         ) {
-            Icon(Icons.Default.Add, contentDescription = "Adicionar")
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(horizontal = 6.dp)) {
+                Icon(Icons.Default.Add, contentDescription = "Adicionar")
+                Text("Adicionar")
+            }
         }
     }
         )
@@ -131,6 +78,8 @@ fun ClientesMainScreen() {
 
 @Preview
 @Composable
-fun ClientesScreenPreview() {
-    ClientesMainScreen()
+fun TelaPrincipalClientesPreview() {
+    val navController = rememberNavController()
+
+    TelaPrincipalClientes(navController, ClientesViewModel() )
 }

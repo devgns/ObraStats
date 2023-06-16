@@ -9,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,40 +31,92 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.obrastats.composables.ClientesMainScreen
+import com.example.obrastats.composables.TelaPrincipalClientes
 import com.example.obrastats.ui.theme.ObraStatsTheme
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
+import androidx.navigation.compose.rememberNavController
+import com.example.obrastats.composables.FormularioCliente
+import com.example.obrastats.composables.FormularioColaborador
+import com.example.obrastats.composables.FormularioObra
+import com.example.obrastats.composables.TelaPrincipalColaboradores
+import com.example.obrastats.composables.TelaPrincipalObras
+import com.example.obrastats.viewmodel.ClientesViewModel
 
 class MainActivity : ComponentActivity() {
+
+    val clientesViewModel: ClientesViewModel = ClientesViewModel();
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContent {
             ObraStatsTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
+                val navController = rememberNavController()
+                NavHost(navController = navController, startDestination = "home"){
+                    composable("home"){
+                        MainScreen(navController)
+                    }
 
-                    ClientesMainScreen()
+                    navigation("lista", "clientes") {
+                        composable("lista") {
+                            TelaPrincipalClientes(navController,clientesViewModel)
+                        }
+                        composable("criar-editar-cliente") {
+                            FormularioCliente(navController,clientesViewModel)
+                        }
+                    }
+
+                    navigation("lista", "colaboradores"){
+                        composable("lista"){
+                            TelaPrincipalColaboradores()
+                        }
+                        composable("criar-editar"){
+                            FormularioColaborador({})
+                        }
+                    }
+
+                    navigation("lista", "obras"){
+                        composable("lista"){
+                            TelaPrincipalObras()
+                        }
+                        composable("criar-editar"){
+                            FormularioObra({}, {})
+                        }
+                    }
                 }
+
             }
         }
     }
 }
 
 @Composable
-fun InitialMenu(
-    modifier: Modifier = Modifier.fillMaxHeight()
-) {
+fun MainScreen(navController: NavController, modifier: Modifier = Modifier.fillMaxHeight()) {
+    val selectedItem = remember { mutableStateOf(-1) }
+
+    val menuItems = listOf(
+        R.string.clientes to "clientes",
+        R.string.obras to "obras",
+        R.string.colaboradores to "colaboradores",
+    ).map { MenuItemRouteStringPair(it.first, it.second) }
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(15.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp),
-        modifier = modifier.fillMaxHeight()
-        ) {
+        modifier = Modifier.fillMaxHeight()
+    ) {
         items(menuItems) { item ->
-            MenuButton(text = item.text, route = item.route)
+            MenuButton(
+                text = item.text,
+                route = item.route,
+                modifier = Modifier.clickable { navController.navigate(item.route) }
+            )
         }
     }
 }
@@ -71,7 +124,7 @@ fun InitialMenu(
 @Composable
 fun MenuButton(
     @StringRes text: Int,
-    @StringRes route: Int,
+     route: String,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
@@ -80,11 +133,8 @@ fun MenuButton(
             containerColor = MaterialTheme.colorScheme.primary
         ),
         shape = RoundedCornerShape(6.dp),
-        modifier = Modifier.height(40.dp).clickable(
-            onClick = {Toast.makeText(context, text, Toast.LENGTH_SHORT).show()}
-        )
-
-        ) {
+        modifier = modifier.height(70.dp)
+    ) {
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -95,11 +145,10 @@ fun MenuButton(
             Text(
                 text = stringResource(id = text),
                 modifier = Modifier.padding(horizontal = 16.dp),
-                style = MaterialTheme.typography.titleSmall
+                style = MaterialTheme.typography.bodyMedium
             )
         }
     }
-
 }
 
 
@@ -107,34 +156,20 @@ fun MenuButton(
 @Composable
 fun InitialMenuPreview() {
     ObraStatsTheme {
-        InitialMenu()
+        val navController = rememberNavController()
+
+        MainScreen(navController)
     }
 }
-
-private val menuItems = listOf(
-    R.string.clientes to R.string.rota_lista_clientes,
-    R.string.obras to R.string.rota_lista_obras,
-    R.string.funcionarios to R.string.rota_lista_funcionarios,
-    R.string.servicos to R.string.rota_lista_servicos,
-    R.string.analises to R.string.rota_lista_analises
-).map { MenuItemRouteStringPair(it.first, it.second) }
-
-
-
-
-//IconButton(onClick = { expanded = !expanded }) {
-//    Icon(
-//        imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
-//        contentDescription = if (expanded) {
-//            stringResource(R.string.show_less)
-//        } else {
-//            stringResource(R.string.show_more)
-//        }
-//    )
-//}
-
-
 private data class MenuItemRouteStringPair(
     @StringRes val text: Int,
-    @StringRes val route: Int
+     val route: String
 )
+
+
+//                Surface(
+//                    modifier = Modifier.fillMaxSize(),
+//                    color = MaterialTheme.colorScheme.background
+//                ) {
+//                    MainScreen()
+//                }

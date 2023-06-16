@@ -24,7 +24,7 @@ import com.example.obrastats.enums.ModeloDeContratacaoEnum
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ColaboradorFormulario(onSubmit: (Colaborador) -> Unit) {
+fun FormularioColaborador(onSubmit: (Colaborador) -> Unit) {
     val nomeState = remember { mutableStateOf("") }
     val profissaoState = remember { mutableStateOf("") }
     val modeloContratoState = remember { mutableStateOf<ModeloDeContratacaoEnum?>(null) }
@@ -145,5 +145,5 @@ fun ColaboradorFormulario(onSubmit: (Colaborador) -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun ColaboradorFormularioPreview() {
-    ColaboradorFormulario({})
+    FormularioColaborador({})
 }

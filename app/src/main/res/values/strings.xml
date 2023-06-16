@@ -2,14 +2,14 @@
     <string name="app_name">ObraStats</string>
     <string name="clientes">Clientes</string>
     <string name="obras">Obras</string>
-    <string name="funcionarios">Funcionários</string>
+    <string name="colaboradores">Colaboradores</string>
     <string name="servicos">Serviços</string>
     <string name="analises">Análises</string>
 
-    <string name="rota_lista_clientes">lista_clientes</string>
-    <string name="rota_lista_obras">lista_obras</string>
-    <string name="rota_lista_funcionarios">lista_funcionarios</string>
-    <string name="rota_lista_servicos">lista_servicos</string>
-    <string name="rota_lista_analises">lista_analises</string>
+    <string name="rota_tela_clientes">tela_clientes</string>
+    <string name="rota_tela_obras">tela_obras</string>
+    <string name="rota_tela_colaboradores">tela_colaboradores</string>
+    <string name="rota_tela_servicos">tela_servicos</string>
+    <string name="rota_tela_analises">tela_analises</string>
 
 </resources>
