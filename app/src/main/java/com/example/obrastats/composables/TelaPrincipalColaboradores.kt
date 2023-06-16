@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.obrastats.classes.Cliente
 import com.example.obrastats.classes.Colaborador
 import com.example.obrastats.classes.Obra
@@ -28,7 +29,7 @@ import com.example.obrastats.enums.ModeloDeContratacaoEnum
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TelaPrincipalColaboradores() {
+fun TelaPrincipalColaboradores(navController: NavController) {
     var showDialog by remember { mutableStateOf(false) }
     val colaboradores = listOf(
         Colaborador(
@@ -71,7 +72,7 @@ fun TelaPrincipalColaboradores() {
             TopAppBar(
                 title = { Text(text = "Colaboradores") },
                 navigationIcon = {
-                    IconButton(onClick = { /* Navegar para a tela anterior */ }) {
+                    IconButton(onClick = {navController.navigate("home") }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
                     }
                 }
@@ -108,8 +109,8 @@ fun TelaPrincipalColaboradores() {
     }
 }
 
-@Preview
-@Composable
-fun TelaPrincipalColaboradoresPreview() {
-    TelaPrincipalColaboradores()
-}
+//@Preview
+//@Composable
+//fun TelaPrincipalColaboradoresPreview() {
+//    TelaPrincipalColaboradores()
+//}

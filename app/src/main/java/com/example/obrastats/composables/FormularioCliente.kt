@@ -1,5 +1,6 @@
 package com.example.obrastats.composables
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,6 +39,7 @@ import com.example.obrastats.viewmodel.ClientesViewModel
 fun FormularioCliente(navController: NavController, clientesViewModel: ClientesViewModel) {
 
     val currentIndex: Int? = clientesViewModel.getCurrentIndex();
+    val context = LocalContext.current
 
 
     val nomeState = remember { mutableStateOf("") }
@@ -162,6 +165,8 @@ fun FormularioCliente(navController: NavController, clientesViewModel: ClientesV
                                     enderecoState.value
                                 )
                             )
+                            Toast.makeText(context, "Cliente cadastrado com sucesso", Toast.LENGTH_LONG).show()
+
                         } else {
                             clientesViewModel.updateClienteAtIndex(
                                 currentIndex,
@@ -175,6 +180,8 @@ fun FormularioCliente(navController: NavController, clientesViewModel: ClientesV
                                     enderecoState.value
                                 )
                             )
+                            Toast.makeText(context, "Cliente atualizado com sucesso", Toast.LENGTH_LONG).show()
+
                         }
                         clientesViewModel.changeIndex(null);
                         navController.navigate("clientes");

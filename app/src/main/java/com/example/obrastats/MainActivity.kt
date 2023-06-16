@@ -71,7 +71,7 @@ class MainActivity : ComponentActivity() {
 
                     navigation("lista", "colaboradores"){
                         composable("lista"){
-                            TelaPrincipalColaboradores()
+                            TelaPrincipalColaboradores(navController)
                         }
                         composable("criar-editar-colaboradores"){
                             FormularioColaborador({})
@@ -80,7 +80,7 @@ class MainActivity : ComponentActivity() {
 
                     navigation("lista", "obras"){
                         composable("lista"){
-                            TelaPrincipalObras()
+                            TelaPrincipalObras(navController)
                         }
                         composable("criar-editar-obras"){
                             FormularioObra({}, {})

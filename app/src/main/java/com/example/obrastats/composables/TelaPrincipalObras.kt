@@ -20,13 +20,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.obrastats.MainScreen
 import com.example.obrastats.classes.Cliente
 import com.example.obrastats.classes.Obra
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TelaPrincipalObras() {
+fun TelaPrincipalObras(navController: NavController) {
     var showDialog by remember { mutableStateOf(false) }
     val obras = listOf(
         Obra(
@@ -82,7 +83,7 @@ fun TelaPrincipalObras() {
             TopAppBar(
                 title = { Text(text = "Obras") },
                 navigationIcon = {
-                    IconButton(onClick = { /* Navegar para a tela anterior */ }) {
+                    IconButton(onClick = {navController.navigate("home") }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
                     }
                 }
@@ -121,9 +122,9 @@ fun TelaPrincipalObras() {
 
 
 
-@Preview
-@Composable
-fun TelaPrincipalObrasPreview() {
-    TelaPrincipalObras()
-}
+//@Preview
+//@Composable
+//fun TelaPrincipalObrasPreview() {
+//    TelaPrincipalObras()
+//}
 
