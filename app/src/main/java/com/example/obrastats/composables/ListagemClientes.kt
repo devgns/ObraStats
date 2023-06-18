@@ -1,14 +1,10 @@
 package com.example.obrastats.composables
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
-import com.example.obrastats.classes.Cliente
 import com.example.obrastats.viewmodel.ClientesViewModel
 
 @Composable
@@ -26,6 +22,7 @@ fun ListaClientes(navController: NavController, clientesViewModel: ClientesViewM
             }
         }
     }
+
 }
 
 //@Preview

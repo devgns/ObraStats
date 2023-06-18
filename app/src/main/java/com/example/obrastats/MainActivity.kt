@@ -1,7 +1,6 @@
 package com.example.obrastats
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
@@ -9,9 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,7 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+//import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -46,10 +43,14 @@ import com.example.obrastats.composables.FormularioObra
 import com.example.obrastats.composables.TelaPrincipalColaboradores
 import com.example.obrastats.composables.TelaPrincipalObras
 import com.example.obrastats.viewmodel.ClientesViewModel
+import com.example.obrastats.viewmodel.ColaboradoresViewModel
+import com.example.obrastats.viewmodel.ObrasViewModel
 
 class MainActivity : ComponentActivity() {
 
     val clientesViewModel: ClientesViewModel = ClientesViewModel();
+    val colaboradoresViewModel: ColaboradoresViewModel = ColaboradoresViewModel();
+    val obrasViewModel: ObrasViewModel = ObrasViewModel();
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -71,19 +72,19 @@ class MainActivity : ComponentActivity() {
 
                     navigation("lista", "colaboradores"){
                         composable("lista"){
-                            TelaPrincipalColaboradores(navController)
+                            TelaPrincipalColaboradores(navController, colaboradoresViewModel)
                         }
-                        composable("criar-editar-colaboradores"){
-                            FormularioColaborador({})
+                        composable("criar-editar-colaborador"){
+                            FormularioColaborador(navController, colaboradoresViewModel)
                         }
                     }
 
                     navigation("lista", "obras"){
                         composable("lista"){
-                            TelaPrincipalObras(navController)
+                            TelaPrincipalObras(navController, obrasViewModel)
                         }
-                        composable("criar-editar-obras"){
-                            FormularioObra({}, {})
+                        composable("criar-editar-obra"){
+                            FormularioObra(navController, obrasViewModel)
                         }
                     }
                 }

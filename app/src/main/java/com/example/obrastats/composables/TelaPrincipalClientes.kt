@@ -23,15 +23,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.obrastats.classes.Cliente
 import com.example.obrastats.viewmodel.ClientesViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TelaPrincipalClientes(navController: NavController, clientesViewModel: ClientesViewModel) {
-    var showDialog by remember { mutableStateOf(false) }
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -58,7 +55,9 @@ fun TelaPrincipalClientes(navController: NavController, clientesViewModel: Clien
         },
     floatingActionButton = {
         FloatingActionButton(
-            onClick = {  navController.navigate("criar-editar-cliente")},
+            onClick = {
+                clientesViewModel.changeIndex(null);
+                navController.navigate("criar-editar-cliente")},
             modifier = Modifier
                 .padding(16.dp),
 
@@ -71,9 +70,6 @@ fun TelaPrincipalClientes(navController: NavController, clientesViewModel: Clien
     }
         )
 
-    if (showDialog) {
-        // Exibir diálogo ou navegar para a tela de preenchimento de formulário
-    }
 }
 
 @Preview

@@ -4,7 +4,6 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -67,7 +66,7 @@ fun FormularioCliente(navController: NavController, clientesViewModel: ClientesV
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Cadastrar cliente") },
+                title = { Text(text = if(currentIndex != null) "Atualizar cliente" else "Cadastrar cliente") },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate("clientes") }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
@@ -153,34 +152,35 @@ fun FormularioCliente(navController: NavController, clientesViewModel: ClientesV
 
                 Button(
                     onClick = {
+                        val cliente = Cliente(
+                            null,
+                            nomeState.value,
+                            sexoState.value ?: "",
+                            celularState.value,
+                            emailState.value,
+                            cidadeState.value,
+                            enderecoState.value
+                        )
                         if (currentIndex == null) {
                             clientesViewModel.addCliente(
-                                Cliente(
-                                    null,
-                                    nomeState.value,
-                                    sexoState.value ?: "",
-                                    celularState.value,
-                                    emailState.value,
-                                    cidadeState.value,
-                                    enderecoState.value
-                                )
+                                cliente
                             )
-                            Toast.makeText(context, "Cliente cadastrado com sucesso", Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                context,
+                                "Cliente cadastrado com sucesso",
+                                Toast.LENGTH_LONG
+                            ).show()
 
                         } else {
                             clientesViewModel.updateClienteAtIndex(
                                 currentIndex,
-                                Cliente(
-                                    null,
-                                    nomeState.value,
-                                    sexoState.value ?: "",
-                                    celularState.value,
-                                    emailState.value,
-                                    cidadeState.value,
-                                    enderecoState.value
-                                )
+                                cliente
                             )
-                            Toast.makeText(context, "Cliente atualizado com sucesso", Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                context,
+                                "Cliente atualizado com sucesso",
+                                Toast.LENGTH_LONG
+                            ).show()
 
                         }
                         clientesViewModel.changeIndex(null);
@@ -189,10 +189,9 @@ fun FormularioCliente(navController: NavController, clientesViewModel: ClientesV
                     enabled = isEmailValid(emailState.value) && nomeState.value.isNotBlank() && celularState.value.isNotBlank() && cidadeState.value.isNotBlank() && enderecoState.value.isNotBlank(),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Cadastrar")
+                    Text(text = if (currentIndex != null) "Atualizar" else "Cadastrar")
                 }
             }
-
         },
     )
 

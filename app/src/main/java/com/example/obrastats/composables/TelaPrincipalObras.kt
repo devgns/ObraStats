@@ -18,66 +18,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.obrastats.MainScreen
-import com.example.obrastats.classes.Cliente
-import com.example.obrastats.classes.Obra
+import com.example.obrastats.viewmodel.ObrasViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TelaPrincipalObras(navController: NavController) {
-    var showDialog by remember { mutableStateOf(false) }
-    val obras = listOf(
-        Obra(
-            id = 1,
-            nome = "Obra 1",
-            cliente = Cliente(
-                id = 1,
-                nome = "Cliente 1",
-                sexo = "Feminino",
-                celular = "34999999999",
-                email = "cliente1@example.com",
-                cidade = "Uberaba",
-                endereco = "Rua A"
-            ),
-            cidade = "Uberaba",
-            endereco = "Rua X"
-        ),
-        Obra(
-            id = 2,
-            nome = "Obra 2",
-            cliente = Cliente(
-                id = 2,
-                nome = "Cliente 2",
-                sexo = "Masculino",
-                celular = "34888888888",
-                email = "cliente2@example.com",
-                cidade = "Uberlândia",
-                endereco = "Rua B"
-            ),
-            cidade = "Uberlândia",
-            endereco = "Rua Y"
-        ),
-        Obra(
-            id = 3,
-            nome = "Obra 3",
-            cliente = Cliente(
-                id = 3,
-                nome = "Cliente 3",
-                sexo = "Feminino",
-                celular = "34777777777",
-                email = "cliente3@example.com",
-                cidade = "Belo Horizonte",
-                endereco = "Rua Z"
-            ),
-            cidade = "Belo Horizonte",
-            endereco = "Rua Z"
-        )
-    )
-
-
+fun TelaPrincipalObras(navController: NavController, obrasViewModel: ObrasViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -95,12 +42,14 @@ fun TelaPrincipalObras(navController: NavController) {
                     .fillMaxSize()
                     .padding(paddingValues),
             ) {
-                ListaObras(obras = obras)
+                ListaObras(navController, obrasViewModel)
             }
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { showDialog = true },
+                onClick = {
+                    obrasViewModel.changeIndex(null);
+                    navController.navigate("criar-editar-obra") },
                 modifier = Modifier
                     .padding(16.dp),
             ) {
@@ -114,10 +63,6 @@ fun TelaPrincipalObras(navController: NavController) {
             }
         }
     )
-
-    if (showDialog) {
-        // Exibir diálogo ou navegar para a tela de preenchimento de formulário
-    }
 }
 
 

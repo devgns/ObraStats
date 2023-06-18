@@ -16,14 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
-
-import com.example.obrastats.classes.Cliente
 import com.example.obrastats.classes.Obra
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ObraCard(obra: Obra) {
+fun ObraCard(obra: Obra, onEditClicked: () -> Unit) {
     Card(
         modifier = Modifier.padding(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
@@ -41,7 +38,7 @@ fun ObraCard(obra: Obra) {
                     modifier = Modifier.weight(1f)
                 )
                 IconButton(
-                    onClick = { /* Navegar para a tela de edição da obra */ }
+                    onClick = onEditClicked
                 ) {
                     Icon(
                         imageVector = Icons.Default.Edit,
@@ -56,24 +53,24 @@ fun ObraCard(obra: Obra) {
     }
 }
 
-@Preview
-@Composable
-fun ObraCardPreview() {
-    ObraCard(
-        Obra(
-            null,
-            "Obra 1",
-            Cliente(
-                null,
-                "Cliente 1",
-                "Feminino",
-                "34999999999",
-                "cliente1@email.com",
-                "Uberaba",
-                "Rua A"
-            ),
-            "Uberaba",
-            "Rua B"
-        )
-    )
-}
+//@Preview
+//@Composable
+//fun ObraCardPreview() {
+//    ObraCard(
+//        Obra(
+//            null,
+//            "Obra 1",
+//            Cliente(
+//                null,
+//                "Cliente 1",
+//                "Feminino",
+//                "34999999999",
+//                "cliente1@email.com",
+//                "Uberaba",
+//                "Rua A"
+//            ),
+//            "Uberaba",
+//            "Rua B"
+//        )
+//    )
+//}

@@ -19,54 +19,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.obrastats.classes.Cliente
-import com.example.obrastats.classes.Colaborador
-import com.example.obrastats.classes.Obra
-import com.example.obrastats.enums.ModeloDeContratacaoEnum
+import com.example.obrastats.viewmodel.ColaboradoresViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TelaPrincipalColaboradores(navController: NavController) {
-    var showDialog by remember { mutableStateOf(false) }
-    val colaboradores = listOf(
-        Colaborador(
-            id = 1,
-            nome = "Colaborador 1",
-            profissao = "Pedreiro",
-            modeloDeContrato = ModeloDeContratacaoEnum.EFETIVO,
-            sexo = "Masculino",
-            celular = "34999999999",
-            email = "colaborador1@example.com",
-            cidade = "Uberaba",
-            endereco = "Rua A"
-        ),
-        Colaborador(
-            id = 2,
-            nome = "Colaborador 2",
-            profissao = "Eletricista",
-            modeloDeContrato = ModeloDeContratacaoEnum.DIARISTA,
-            sexo = "Masculino",
-            celular = "34888888888",
-            email = "colaborador2@example.com",
-            cidade = "Uberlândia",
-            endereco = "Rua B"
-        ),
-        Colaborador(
-            id = 3,
-            nome = "Colaborador 3",
-            profissao = "Encanador",
-            modeloDeContrato = ModeloDeContratacaoEnum.DIARISTA,
-            sexo = "Masculino",
-            celular = "34777777777",
-            email = "colaborador3@example.com",
-            cidade = "Belo Horizonte",
-            endereco = "Rua C"
-        )
-    )
-
+fun TelaPrincipalColaboradores(navController: NavController, colaboradoresViewModel: ColaboradoresViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -84,12 +43,14 @@ fun TelaPrincipalColaboradores(navController: NavController) {
                     .fillMaxSize()
                     .padding(paddingValues),
             ) {
-                ListaColaboradores(colaboradores = colaboradores)
+                ListaColaboradores(navController, colaboradoresViewModel)
             }
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { showDialog = true },
+                onClick = {
+                    colaboradoresViewModel.changeIndex(null);
+                    navController.navigate("criar-editar-colaborador") },
                 modifier = Modifier
                     .padding(16.dp),
             ) {
@@ -103,10 +64,6 @@ fun TelaPrincipalColaboradores(navController: NavController) {
             }
         }
     )
-
-    if (showDialog) {
-        // Exibir diálogo ou navegar para a tela de preenchimento de formulário
-    }
 }
 
 //@Preview

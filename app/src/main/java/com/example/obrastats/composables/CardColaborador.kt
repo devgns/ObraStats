@@ -16,14 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
-
 import com.example.obrastats.classes.Colaborador
-import com.example.obrastats.enums.ModeloDeContratacaoEnum
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ColaboradorCard(colaborador: Colaborador) {
+fun ColaboradorCard(colaborador: Colaborador, onEditClicked: () -> Unit) {
     Card(
         modifier = Modifier.padding(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
@@ -41,7 +38,7 @@ fun ColaboradorCard(colaborador: Colaborador) {
                     modifier = Modifier.weight(1f)
                 )
                 IconButton(
-                    onClick = { /* Navegar para a tela de edição do colaborador */ }
+                    onClick = onEditClicked
                 ) {
                     Icon(
                         imageVector = Icons.Default.Edit,
@@ -60,20 +57,20 @@ fun ColaboradorCard(colaborador: Colaborador) {
     }
 }
 
-@Preview
-@Composable
-fun ColaboradorCardPreview() {
-    ColaboradorCard(
-        Colaborador(
-            null,
-            "João",
-            "Eletricista",
-            ModeloDeContratacaoEnum.DIARISTA,
-            "Masculino",
-            "34999999999",
-            "joao@email.com",
-            "Uberaba",
-            "Rua Feliz"
-        )
-    )
-}
+//@Preview
+//@Composable
+//fun ColaboradorCardPreview() {
+//    ColaboradorCard(
+//        Colaborador(
+//            null,
+//            "João",
+//            "Eletricista",
+//            ModeloDeContratacaoEnum.DIARISTA,
+//            "Masculino",
+//            "34999999999",
+//            "joao@email.com",
+//            "Uberaba",
+//            "Rua Feliz"
+//        )
+//    )
+//}

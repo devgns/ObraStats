@@ -5,7 +5,7 @@ import com.example.obrastats.classes.Cliente
 class ClientesViewModel {
     private var currentIndex: Int? = null
 
-    val clientes: MutableList<Cliente> = mutableListOf(
+    private val clientes: MutableList<Cliente> = mutableListOf(
         Cliente(
             id = 1,
             nome = "Cliente 1",
