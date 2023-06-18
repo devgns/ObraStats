@@ -24,6 +24,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun <T> dropDownForm(
@@ -49,14 +50,16 @@ fun <T> dropDownForm(
                 .fillMaxWidth()
                 .onGloballyPositioned { coordinates ->
                     textFilledSize = coordinates.size.toSize()
-                },
+                }
+                .clickable { expanded = !expanded },
             shape = RoundedCornerShape(12.dp),
             label = {
                 Text(text = placeHolder)
             },
             trailingIcon = {
                 Icon(icon, null, Modifier.clickable { expanded = !expanded })
-            }
+            },
+            enabled = false
         )
 
         DropdownMenu(

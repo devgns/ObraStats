@@ -84,7 +84,7 @@ class MainActivity : ComponentActivity() {
                             TelaPrincipalObras(navController, obrasViewModel)
                         }
                         composable("criar-editar-obra"){
-                            FormularioObra(navController, obrasViewModel)
+                            FormularioObra(navController, obrasViewModel, clientesViewModel)
                         }
                     }
                 }
