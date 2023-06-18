@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "546611605896",
+    "project_id": "obrastats",
+    "storage_bucket": "obrastats.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:546611605896:android:00f166ee7dcccce2454a3d",
+        "android_client_info": {
+          "package_name": "com.example.obrastats"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "546611605896-f31bko1v0bq0i888vnrpcbdcpr0d0j9v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCt2M4bAENtUbbLaLws0lf9URZGnpgd96E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "546611605896-f31bko1v0bq0i888vnrpcbdcpr0d0j9v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
