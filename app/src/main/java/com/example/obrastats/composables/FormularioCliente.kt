@@ -53,7 +53,7 @@ fun FormularioCliente(navController: NavController, clientesViewModel: ClientesV
     val listaSexos = listOf("Masculino", "Feminino")
 
     if (currentIndex != null) {
-        val cliente = clientesViewModel.getClientesList()[currentIndex]
+        val cliente = clientesViewModel.getListaClientes()[currentIndex]
         nomeState.value = cliente.nome
         sexoState.value = cliente.sexo
         celularState.value = cliente.celular
@@ -66,7 +66,7 @@ fun FormularioCliente(navController: NavController, clientesViewModel: ClientesV
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = if(currentIndex != null) "Atualizar cliente" else "Cadastrar cliente") },
+                title = { Text(text = if (currentIndex != null) "Atualizar cliente" else "Cadastrar cliente") },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate("clientes") }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
@@ -163,13 +163,23 @@ fun FormularioCliente(navController: NavController, clientesViewModel: ClientesV
                         )
                         if (currentIndex == null) {
                             clientesViewModel.addCliente(
-                                cliente
+                                cliente = cliente, callback = { response ->
+                                    if (response) {
+                                        Toast.makeText(
+                                            context,
+                                            "Cliente cadastrado com sucesso",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }else{
+                                        Toast.makeText(
+                                            context,
+                                            "Falha no cadastro de cliente, tente novamente",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
+                                }
                             )
-                            Toast.makeText(
-                                context,
-                                "Cliente cadastrado com sucesso",
-                                Toast.LENGTH_LONG
-                            ).show()
+//
 
                         } else {
                             clientesViewModel.updateClienteAtIndex(

@@ -14,6 +14,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,6 +26,7 @@ import com.example.obrastats.viewmodel.ClientesViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TelaPrincipalClientes(navController: NavController, clientesViewModel: ClientesViewModel) {
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -42,29 +44,33 @@ fun TelaPrincipalClientes(navController: NavController, clientesViewModel: Clien
                     .fillMaxSize()
                     .padding(paddingValues),
 
-            ) {
+                ) {
                 ListaClientes(navController, clientesViewModel)
 
             }
 
 
         },
-    floatingActionButton = {
-        FloatingActionButton(
-            onClick = {
-                clientesViewModel.changeIndex(null);
-                navController.navigate("criar-editar-cliente")},
-            modifier = Modifier
-                .padding(16.dp),
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    clientesViewModel.changeIndex(null);
+                    navController.navigate("criar-editar-cliente")
+                },
+                modifier = Modifier
+                    .padding(16.dp),
 
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(horizontal = 6.dp)) {
-                Icon(Icons.Default.Add, contentDescription = "Adicionar")
-                Text("Adicionar")
+                ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(horizontal = 6.dp)
+                ) {
+                    Icon(Icons.Default.Add, contentDescription = "Adicionar")
+                    Text("Adicionar")
+                }
             }
         }
-    }
-        )
+    )
 
 }
 
@@ -73,5 +79,5 @@ fun TelaPrincipalClientes(navController: NavController, clientesViewModel: Clien
 fun TelaPrincipalClientesPreview() {
     val navController = rememberNavController()
 
-    TelaPrincipalClientes(navController, ClientesViewModel() )
+    TelaPrincipalClientes(navController, ClientesViewModel())
 }

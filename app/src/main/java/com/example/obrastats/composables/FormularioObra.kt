@@ -49,7 +49,7 @@ fun FormularioObra(navController: NavController, obrasViewModel: ObrasViewModel,
 
     val listaClientesState = remember { mutableStateListOf<Cliente>() }
     LaunchedEffect(Unit) {
-        val clientesList = clientesViewModel.getClientesList()
+        val clientesList = clientesViewModel.getListaClientes()
         listaClientesState.addAll(clientesList)
     }
 

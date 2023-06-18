@@ -9,7 +9,7 @@ import com.example.obrastats.viewmodel.ClientesViewModel
 
 @Composable
 fun ListaClientes(navController: NavController, clientesViewModel: ClientesViewModel) {
-    var clientes = clientesViewModel.getClientesList()
+    var clientes = clientesViewModel.getListaClientes()
     if (clientes.isEmpty()) {
         Text(text = "Não há clientes para mostrar")
     } else {

@@ -57,11 +57,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             ObraStatsTheme {
                 val navController = rememberNavController()
+                clientesViewModel.fetchClientes();
                 NavHost(navController = navController, startDestination = "home"){
                     composable("home"){
                         MainScreen(navController)
                     }
                     navigation("lista", "clientes") {
+
                         composable("lista") {
                             TelaPrincipalClientes(navController,clientesViewModel)
                         }

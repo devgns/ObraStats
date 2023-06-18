@@ -1,46 +1,65 @@
 package com.example.obrastats.viewmodel
 
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
 import com.example.obrastats.classes.Cliente
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.auth.User
 
 class ClientesViewModel {
     private var currentIndex: Int? = null
+    private var db = FirebaseFirestore.getInstance()
+    private val clientes: MutableList<Cliente> = mutableListOf()
 
-    private val clientes: MutableList<Cliente> = mutableListOf(
-        Cliente(
-            id = 1,
-            nome = "Cliente 1",
-            sexo = "Feminino",
-            celular = "34999999999",
-            email = "cliente1@example.com",
-            cidade = "Uberaba",
-            endereco = "Rua A"
-        ),
-        Cliente(
-            id = 2,
-            nome = "Cliente 2",
-            sexo = "Masculino",
-            celular = "34888888888",
-            email = "cliente2@example.com",
-            cidade = "Uberlândia",
-            endereco = "Rua B"
-        ),
-        Cliente(
-            id = 3,
-            nome = "Cliente 3",
-            sexo = "Feminino",
-            celular = "34777777777",
-            email = "cliente3@example.com",
-            cidade = "Uberlândia",
-            endereco = "Rua C"
-        )
-    )
+    fun getListaClientes(): List<Cliente> {
+        return clientes;
+    }
 
-    fun getClientesList(): List<Cliente> {
+    fun fetchClientes(): List<Cliente> {
+        clientes.clear();
+        db.collection("cliente")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val cliente = document.data
+                    Log.i("cliente", document.data.toString())
+                    Log.i("docId", document.id)
+
+                    clientes.add(
+                        Cliente(
+                            id = document.id,
+                            nome = cliente["nome"] as String,
+                            sexo = cliente["sexo"] as String,
+                            celular = cliente["celular"] as String,
+                            email = cliente["email"] as String,
+                            cidade = cliente["cidade"] as String,
+                            endereco = cliente["endereco"] as String
+                        )
+                    )
+                }
+            }
         return clientes
     }
 
-    fun addCliente(cliente: Cliente) {
+    fun addCliente(cliente: Cliente, callback: (Boolean) -> Unit) {
         clientes.add(cliente)
+
+        val clientMap = hashMapOf(
+            "nome" to cliente.nome,
+            "sexo" to cliente.sexo,
+            "celular" to cliente.celular,
+            "email" to cliente.email,
+            "cidade" to cliente.cidade,
+            "endereco" to cliente.endereco
+        )
+
+        db.collection("cliente").document().set(clientMap).addOnSuccessListener {
+            callback(true)
+        }.addOnFailureListener {
+            callback(false)
+        }
     }
 
     fun getCurrentIndex(): Int? {
@@ -48,9 +67,9 @@ class ClientesViewModel {
     }
 
     fun changeIndex(newIndex: Int?) {
-        if(newIndex == null){
+        if (newIndex == null) {
             currentIndex = newIndex;
-        }else if (newIndex >= 0 && newIndex < clientes.size) {
+        } else if (newIndex >= 0 && newIndex < clientes.size) {
             currentIndex = newIndex
         }
     }

@@ -11,7 +11,7 @@ class ObrasViewModel {
             id = 1,
             nome = "Obra 1",
             cliente = Cliente(
-                id = 1,
+                id = "1",
                 nome = "Cliente 1",
                 sexo = "Feminino",
                 celular = "34999999999",
@@ -26,7 +26,7 @@ class ObrasViewModel {
             id = 2,
             nome = "Obra 2",
             cliente = Cliente(
-                id = 2,
+                id = "2",
                 nome = "Cliente 2",
                 sexo = "Masculino",
                 celular = "34888888888",
@@ -41,7 +41,7 @@ class ObrasViewModel {
             id = 3,
             nome = "Obra 3",
             cliente = Cliente(
-                id = 3,
+                id = "3",
                 nome = "Cliente 3",
                 sexo = "Feminino",
                 celular = "34777777777",
