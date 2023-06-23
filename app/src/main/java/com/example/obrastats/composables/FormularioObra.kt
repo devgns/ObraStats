@@ -38,7 +38,7 @@ import com.example.obrastats.viewmodel.ObrasViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FormularioObra(navController: NavController, obrasViewModel: ObrasViewModel, clientesVM: ClientesViewModel) {
+fun FormularioObra(navController: NavController, obrasVM: ObrasViewModel, clientesVM: ClientesViewModel) {
 
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -128,7 +128,7 @@ fun FormularioObra(navController: NavController, obrasViewModel: ObrasViewModel,
                         )
 
                         if (true) {
-                            obrasViewModel.addObra(obra);
+//                            obrasViewModel.addObra(obra);
                             Toast.makeText(
                                 context,
                                 "Obra cadastrada com sucesso",
@@ -136,7 +136,7 @@ fun FormularioObra(navController: NavController, obrasViewModel: ObrasViewModel,
                             )
                                 .show()
                         } else {
-                            obrasViewModel.updateObraAtIndex(1, obra);
+//                            obrasViewModel.updateObraAtIndex(1, obra);
                             Toast.makeText(
                                 context,
                                 "Obra atualizada com sucesso",
@@ -144,7 +144,7 @@ fun FormularioObra(navController: NavController, obrasViewModel: ObrasViewModel,
                             )
                                 .show()
                         }
-                        obrasViewModel.changeIndex(null);
+//                        obrasViewModel.changeIndex(null);
                         navController.navigate("obras");
                     },
                     enabled = nomeState.value.isNotBlank() && cidadeState.value.isNotBlank() && enderecoState.value.isNotBlank(),

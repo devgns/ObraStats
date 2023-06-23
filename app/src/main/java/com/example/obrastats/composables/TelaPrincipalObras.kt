@@ -13,14 +13,26 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.obrastats.viewmodel.ObrasViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TelaPrincipalObras(navController: NavController, obrasViewModel: ObrasViewModel) {
+fun TelaPrincipalObras(navController: NavController, obrasVM: ObrasViewModel) {
+
+    val obrasState = obrasVM.obras.collectAsState(initial = mutableListOf())
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(Unit) {
+        scope.launch {
+            obrasVM.getObras()
+        }
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -38,13 +50,13 @@ fun TelaPrincipalObras(navController: NavController, obrasViewModel: ObrasViewMo
                     .fillMaxSize()
                     .padding(paddingValues),
             ) {
-                ListaObras(navController, obrasViewModel)
+                ListaObras(navController, obrasState.value, obrasVM)
             }
         },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    obrasViewModel.changeIndex(null);
+                    obrasVM.setSelectedId(null);
                     navController.navigate("criar-editar-obra") },
                 modifier = Modifier
                     .padding(16.dp),

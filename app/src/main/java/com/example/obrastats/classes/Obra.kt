@@ -1,6 +1,6 @@
 package com.example.obrastats.classes
 data class Obra(
-    val id: Int?,
+    val id: String?,
     val nome: String,
     val cliente: Cliente,
     val cidade: String,

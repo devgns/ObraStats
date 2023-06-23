@@ -24,63 +24,6 @@ import androidx.navigation.NavController
 import com.example.obrastats.viewmodel.ColaboradoresViewModel
 import kotlinx.coroutines.launch
 
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun TelaPrincipalColaboradores(navController: NavController) {
-//    val colaboradoresVM = ColaboradoresViewModel()
-//    val colaboradores = colaboradoresVM.colaboradores.collectAsState(initial = mutableListOf()).value;
-//    val scope = rememberCoroutineScope()
-//    LaunchedEffect(Unit) {
-//        scope.launch {
-//            colaboradoresVM.getColaboradores()
-//        }
-//    }
-//    LaunchedEffect(Unit) {
-//        colaboradoresVM.colaboradores.collect {
-//            Log.d("Colaboradores", it.toString())
-//        }
-//    }
-//
-//    Scaffold(
-//        topBar = {
-//            TopAppBar(
-//                title = { Text(text = "Colaboradores") },
-//                navigationIcon = {
-//                    IconButton(onClick = {navController.navigate("home") }) {
-//                        Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
-//                    }
-//                }
-//            )
-//        },
-//        content = { paddingValues ->
-//            Column(
-//                modifier = Modifier
-//                    .fillMaxSize()
-//                    .padding(paddingValues),
-//            ) {
-//                ListaColaboradores(navController, colaboradores)
-//            }
-//        },
-//        floatingActionButton = {
-//            FloatingActionButton(
-//                onClick = {
-////                    colaboradoresViewModel.changeIndex(null);
-//                    navController.navigate("criar-editar-colaborador") },
-//                modifier = Modifier
-//                    .padding(16.dp),
-//            ) {
-//                Row(
-//                    verticalAlignment = Alignment.CenterVertically,
-//                    modifier = Modifier.padding(horizontal = 6.dp)
-//                ) {
-//                    Icon(Icons.Default.Add, contentDescription = "Adicionar")
-//                    Text("Adicionar")
-//                }
-//            }
-//        }
-//    )
-//}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TelaPrincipalColaboradores(navController: NavController,  colaboradoresVM: ColaboradoresViewModel) {

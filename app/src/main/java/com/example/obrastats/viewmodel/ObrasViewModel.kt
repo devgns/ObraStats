@@ -1,87 +1,79 @@
 package com.example.obrastats.viewmodel
 
+import android.util.Log
 import com.example.obrastats.classes.Cliente
+import com.example.obrastats.classes.Colaborador
 import com.example.obrastats.classes.Obra
+import com.example.obrastats.enums.ModeloDeContratacaoEnum
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class ObrasViewModel {
-    private var currentIndex: Int? = null
-    private var db = FirebaseFirestore.getInstance()
+    private val db = FirebaseFirestore.getInstance()
+    private val _obras = MutableStateFlow<MutableList<Obra>>(mutableListOf())
+    val obras: StateFlow<MutableList<Obra>> = _obras
 
-    private val obras: MutableList<Obra> = mutableListOf(
-        Obra(
-            id = 1,
-            nome = "Obra 1",
-            cliente = Cliente(
-                id = "1",
-                nome = "Cliente 1",
-                sexo = "Feminino",
-                celular = "34999999999",
-                email = "cliente1@example.com",
-                cidade = "Uberaba",
-                endereco = "Rua A"
-            ),
-            cidade = "Uberaba",
-            endereco = "Endereço 1"
-        ),
-        Obra(
-            id = 2,
-            nome = "Obra 2",
-            cliente = Cliente(
-                id = "2",
-                nome = "Cliente 2",
-                sexo = "Masculino",
-                celular = "34888888888",
-                email = "cliente2@example.com",
-                cidade = "Uberlândia",
-                endereco = "Rua B"
-            ),
-            cidade = "Uberlândia",
-            endereco = "Endereço 2"
-        ),
-        Obra(
-            id = 3,
-            nome = "Obra 3",
-            cliente = Cliente(
-                id = "3",
-                nome = "Cliente 3",
-                sexo = "Feminino",
-                celular = "34777777777",
-                email = "cliente3@example.com",
-                cidade = "Uberlândia",
-                endereco = "Rua C"
-            ),
-            cidade = "Uberlândia",
-            endereco = "Endereço 3"
-        )
-    )
+    private var selectedId: String? = null
 
-    fun getObrasList(): List<Obra> {
+    fun setSelectedId(id: String?) {
+        this.selectedId = id
+    }
+
+    fun getObraSelecionada(): Obra? {
+        return obras.value.find { it.id == selectedId }
+    }
+
+    suspend fun getObras(): StateFlow<MutableList<Obra>> {
+        val listaObras: MutableList<Obra> = mutableListOf()
+        db.collection("obra").get().addOnSuccessListener { result ->
+            Log.i("obra",result.toString())
+
+            for (document in result) {
+                val obra = document.data
+                val cliente = Cliente(
+                    id = obra["cliente.id"] as String,
+                    nome = obra["cliente.nome"] as String,
+                    sexo = obra["cliente.sexo"] as String,
+                    celular = obra["cliente.celular"] as String,
+                    email = obra["cliente.email"] as String,
+                    cidade = obra["cliente.cidade"] as String,
+                    endereco = obra["cliente.endereco"] as String
+                )
+                listaObras.add(
+                    Obra(
+                        id = document.id,
+                        nome = obra["nome"] as String,
+                        cliente = cliente,
+                        cidade = obra["cidade"] as String,
+                        endereco = obra["endereco"] as String
+                    )
+                )
+            }
+            _obras.value = listaObras
+        }
         return obras
     }
 
-    fun addObra(obra: Obra) {
-        obras.add(obra)
-    }
+    fun salvarObra(obra: Obra) {
+        val obraMap = hashMapOf(
+            "nome" to obra.nome,
+            "cliente" to obra.cliente,
+            "cidade" to obra.cidade,
+            "endereco" to obra.endereco
+        )
+        if (obra.id != null) {
+            db.collection("obra").document(obra.id).set(obraMap)
+                .addOnCompleteListener {
 
-    fun getCurrentIndex(): Int? {
-        return currentIndex
-    }
+                }
+        } else {
+            db.collection("obra").document().set(obraMap)
+                .addOnCompleteListener {
 
-    fun changeIndex(newIndex: Int?) {
-        if (newIndex == null) {
-            currentIndex = newIndex
-        } else if (newIndex >= 0 && newIndex < obras.size) {
-            currentIndex = newIndex
+                }
         }
     }
 
-    fun updateObraAtIndex(index: Int, novaObra: Obra) {
-        if (index >= 0 && index < obras.size) {
-            obras[index] = novaObra
-        }
-    }
-//    fun getObras(){
-//        db.collection("obras")
-//    }
 }
