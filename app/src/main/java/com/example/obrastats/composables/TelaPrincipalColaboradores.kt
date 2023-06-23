@@ -110,13 +110,13 @@ fun TelaPrincipalColaboradores(navController: NavController,  colaboradoresVM: C
                     .fillMaxSize()
                     .padding(paddingValues),
             ) {
-                ListaColaboradores(navController, colaboradoresState.value)
+                ListaColaboradores(navController, colaboradoresState.value, colaboradoresVM)
             }
         },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-//                    colaboradoresViewModel.changeIndex(null);
+                    colaboradoresVM.setSelectedId(null);
                     navController.navigate("criar-editar-colaborador") },
                 modifier = Modifier
                     .padding(16.dp),

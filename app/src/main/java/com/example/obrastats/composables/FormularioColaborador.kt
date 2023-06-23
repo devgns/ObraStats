@@ -39,9 +39,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun FormularioColaborador(
     navController: NavController,
+    colaboradoresVM : ColaboradoresViewModel
 ) {
-    val colaboradoresVM = ColaboradoresViewModel()
-
+    var colaboradorSelecionado = colaboradoresVM.getColaboradorSelecionado()
     val currentIndex: Int? = colaboradoresVM.getCurrentIndex();
 
     val scope = rememberCoroutineScope()
@@ -57,16 +57,15 @@ fun FormularioColaborador(
     val enderecoState = remember { mutableStateOf("") }
     val listaSexos = listOf("Masculino", "Feminino");
 
-    if (currentIndex != null) {
-        val colaborador = colaboradoresVM.getColaboradoresList()[currentIndex]
-        nomeState.value = colaborador.nome
-        profissaoState.value = colaborador.profissao
-        modeloContratoState.value = colaborador.modeloDeContrato
-        sexoState.value = colaborador.sexo
-        celularState.value = colaborador.celular
-        emailState.value = colaborador.email
-        cidadeState.value = colaborador.cidade
-        enderecoState.value = colaborador.endereco
+    if (colaboradorSelecionado != null) {
+        nomeState.value = colaboradorSelecionado.nome
+        profissaoState.value = colaboradorSelecionado.profissao
+        modeloContratoState.value = colaboradorSelecionado.modeloDeContrato
+        sexoState.value = colaboradorSelecionado.sexo
+        celularState.value = colaboradorSelecionado.celular
+        emailState.value = colaboradorSelecionado.email
+        cidadeState.value = colaboradorSelecionado.cidade
+        enderecoState.value = colaboradorSelecionado.endereco
     }
     Scaffold(
         topBar = {
@@ -163,7 +162,7 @@ fun FormularioColaborador(
                 Button(
                     onClick = {
                         var colaborador = Colaborador(
-                            null,
+                            if(colaboradorSelecionado != null) colaboradorSelecionado.id else null,
                             nomeState.value,
                             profissaoState.value,
                             modeloContratoState.value ?: ModeloDeContratacaoEnum.DIARISTA,
@@ -174,18 +173,10 @@ fun FormularioColaborador(
                             enderecoState.value
                         )
                         scope.launch(Dispatchers.IO) {
-                            if (currentIndex == null) {
-                                Log.i("io", "aqui")
-                                colaboradoresVM.salvarColaborador(colaborador);
 
-                            } else {
-                                colaboradoresVM.updateColaboradorAtIndex(
-                                    currentIndex,
-                                    colaborador
-                                );
-                            }
+                            colaboradoresVM.salvarColaborador(colaborador);
+
                         }
-
                         scope.launch(Dispatchers.Main) {
                             if (currentIndex == null) {
                                 Toast.makeText(
@@ -211,7 +202,6 @@ fun FormularioColaborador(
                 ) {
                     Text(text = if (currentIndex != null) "Atualizar" else "Cadastrar")
                 }
-
             }
         })
 

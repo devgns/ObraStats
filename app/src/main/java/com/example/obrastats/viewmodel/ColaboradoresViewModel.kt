@@ -12,10 +12,17 @@ class ColaboradoresViewModel {
     private var currentIndex: Int? = null
     private val db = FirebaseFirestore.getInstance()
     private val _colaboradores = MutableStateFlow<MutableList<Colaborador>>(mutableListOf())
-     val colaboradores: StateFlow<MutableList<Colaborador>> = _colaboradores;
-    private val selectedId: String? = null
+    val colaboradores: StateFlow<MutableList<Colaborador>> = _colaboradores;
 
-//    fun setSelectedId(id:)
+    private var selectedId: String? = null
+
+    fun setSelectedId(id: String?) {
+        this.selectedId = id;
+    }
+
+    fun getColaboradorSelecionado(): Colaborador? {
+        return colaboradores.value.find { it.id == selectedId }
+    }
 
     fun getColaboradoresList(): List<Colaborador> {
         return mutableListOf()
@@ -76,8 +83,15 @@ class ColaboradoresViewModel {
             "cidade" to colaborador.cidade,
             "endereco" to colaborador.endereco
         )
-        db.collection("colaborador").document().set(colaboradorMap).addOnCompleteListener {
+        if (colaborador.id != null) {
+            db.collection("colaborador").document(colaborador.id).set(colaboradorMap)
+                .addOnCompleteListener {
 
+                }
+        } else {
+            db.collection("colaborador").document().set(colaboradorMap)
+                .addOnCompleteListener {
+                }
         }
     }
 }

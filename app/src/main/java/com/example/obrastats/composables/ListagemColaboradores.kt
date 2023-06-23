@@ -11,7 +11,7 @@ import com.example.obrastats.classes.Colaborador
 import com.example.obrastats.viewmodel.ColaboradoresViewModel
 
 @Composable
-fun ListaColaboradores(navController: NavController, colaboradores: MutableList<Colaborador>) {
+fun ListaColaboradores(navController: NavController, colaboradores: MutableList<Colaborador>,  colaboradoresVM: ColaboradoresViewModel) {
     Log.d("ListaColaboradores", colaboradores.toString())
 
     if (colaboradores.isEmpty()) {
@@ -20,6 +20,7 @@ fun ListaColaboradores(navController: NavController, colaboradores: MutableList<
         LazyColumn {
             itemsIndexed(colaboradores) {index, colaborador ->
                 ColaboradorCard(colaborador = colaborador, onEditClicked = {
+                    colaboradoresVM.setSelectedId(colaborador.id);
                     navController.navigate("criar-editar-colaborador")
                 })
             }

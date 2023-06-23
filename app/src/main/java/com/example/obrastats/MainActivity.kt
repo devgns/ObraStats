@@ -49,7 +49,7 @@ import com.example.obrastats.viewmodel.ObrasViewModel
 class MainActivity : ComponentActivity() {
 
     val clientesViewModel: ClientesViewModel = ClientesViewModel();
-   val colaboradoresViewModel: ColaboradoresViewModel = ColaboradoresViewModel();
+    val colaboradoresViewModel: ColaboradoresViewModel = ColaboradoresViewModel();
     val obrasViewModel: ObrasViewModel = ObrasViewModel();
 
 
@@ -75,7 +75,7 @@ class MainActivity : ComponentActivity() {
                         TelaPrincipalColaboradores(navController, colaboradoresViewModel)
                     }
                     composable("criar-editar-colaborador") {
-                        FormularioColaborador(navController)
+                        FormularioColaborador(navController, colaboradoresViewModel)
                     }
 
                     composable("lista-obras") {
