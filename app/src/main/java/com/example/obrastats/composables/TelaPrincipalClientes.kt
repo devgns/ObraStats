@@ -16,27 +16,27 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.obrastats.viewmodel.ClientesViewModel
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TelaPrincipalClientes(navController: NavController, clientesViewModel: ClientesViewModel) {
+fun TelaPrincipalClientes(navController: NavController, clientesVM: ClientesViewModel) {
 
-//    DisposableEffect(Unit) {
-//        clientesViewModel.fetchClientes()
-//        onDispose {
-//
-//        }
-//    }
-
+    val clientesState = clientesVM.clientes.collectAsState(initial = mutableListOf())
+    val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
-        clientesViewModel.fetchClientes()
+        scope.launch {
+            clientesVM.getClientes()
+        }
     }
 
     Scaffold(
@@ -57,7 +57,7 @@ fun TelaPrincipalClientes(navController: NavController, clientesViewModel: Clien
                     .padding(paddingValues),
 
                 ) {
-                ListaClientes(navController, clientesViewModel)
+                ListaClientes(navController,clientesState.value ,clientesVM)
 
             }
 
@@ -66,7 +66,7 @@ fun TelaPrincipalClientes(navController: NavController, clientesViewModel: Clien
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    clientesViewModel.changeIndex(null);
+                    clientesVM.setSelectedId(null);
                     navController.navigate("criar-editar-cliente")
                 },
                 modifier = Modifier

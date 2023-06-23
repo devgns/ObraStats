@@ -5,18 +5,18 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
+import com.example.obrastats.classes.Cliente
 import com.example.obrastats.viewmodel.ClientesViewModel
 
 @Composable
-fun ListaClientes(navController: NavController, clientesViewModel: ClientesViewModel) {
-    var clientes = clientesViewModel.getListaClientes()
+fun ListaClientes(navController: NavController,clientes: MutableList<Cliente> , clientesViewModel: ClientesViewModel) {
     if (clientes.isEmpty()) {
         Text(text = "Não há clientes para mostrar")
     } else {
         LazyColumn {
             itemsIndexed(clientes) { index, cliente ->
                 ClienteCard(cliente = cliente, onEditClicked = {
-                    clientesViewModel.changeIndex(index);
+                    clientesViewModel.setSelectedId(cliente.id);
                     navController.navigate("criar-editar-cliente");
                 })
             }

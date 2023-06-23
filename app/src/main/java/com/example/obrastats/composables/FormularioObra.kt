@@ -38,9 +38,7 @@ import com.example.obrastats.viewmodel.ObrasViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FormularioObra(navController: NavController, obrasViewModel: ObrasViewModel, clientesViewModel: ClientesViewModel) {
-
-    val currentIndex: Int? = obrasViewModel.getCurrentIndex();
+fun FormularioObra(navController: NavController, obrasViewModel: ObrasViewModel, clientesVM: ClientesViewModel) {
 
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -52,21 +50,20 @@ fun FormularioObra(navController: NavController, obrasViewModel: ObrasViewModel,
 
     val listaClientesState = remember { mutableStateListOf<Cliente>() }
     LaunchedEffect(Unit) {
-        val clientesList = clientesViewModel.getListaClientes()
-        listaClientesState.addAll(clientesList)
+//        val clientesList = clientesViewModel.getListaClientes()
+//        listaClientesState.addAll(clientesList)
     }
 
-    if (currentIndex != null) {
-        val obra = obrasViewModel.getObrasList()[currentIndex]
-        nomeState.value = obra.nome
-        clienteState.value = obra.cliente
-        cidadeState.value = obra.cidade
-        enderecoState.value = obra.endereco
+    if (false) {
+//        nomeState.value = obra.nome
+//        clienteState.value = obra.cliente
+//        cidadeState.value = obra.cidade
+//        enderecoState.value = obra.endereco
     }
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = if(currentIndex != null) "Atualizar obra" else "Cadastrar obra") },
+                title = { Text(text = if(false) "Atualizar obra" else "Cadastrar obra") },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate("obras") }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
@@ -130,7 +127,7 @@ fun FormularioObra(navController: NavController, obrasViewModel: ObrasViewModel,
                             enderecoState.value
                         )
 
-                        if (currentIndex == null) {
+                        if (true) {
                             obrasViewModel.addObra(obra);
                             Toast.makeText(
                                 context,
@@ -139,7 +136,7 @@ fun FormularioObra(navController: NavController, obrasViewModel: ObrasViewModel,
                             )
                                 .show()
                         } else {
-                            obrasViewModel.updateObraAtIndex(currentIndex, obra);
+                            obrasViewModel.updateObraAtIndex(1, obra);
                             Toast.makeText(
                                 context,
                                 "Obra atualizada com sucesso",
@@ -153,7 +150,7 @@ fun FormularioObra(navController: NavController, obrasViewModel: ObrasViewModel,
                     enabled = nomeState.value.isNotBlank() && cidadeState.value.isNotBlank() && enderecoState.value.isNotBlank(),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = if (currentIndex != null) "Atualizar" else "Cadastrar")
+                    Text(text = if (false) "Atualizar" else "Cadastrar")
                 }
             }
 

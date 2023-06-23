@@ -21,6 +21,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -31,16 +32,20 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.obrastats.classes.Cliente
 import com.example.obrastats.viewmodel.ClientesViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FormularioCliente(navController: NavController, clientesViewModel: ClientesViewModel) {
+fun FormularioCliente(navController: NavController, clientesVM: ClientesViewModel) {
 
-    val currentIndex: Int? = clientesViewModel.getCurrentIndex();
+    val clienteSelecionado = clientesVM.getClienteSelecionado();
+    val scope = rememberCoroutineScope()
+
     val context = LocalContext.current
 
-    val idState = remember { mutableStateOf("")}
+    val idState = remember { mutableStateOf("") }
     val nomeState = remember { mutableStateOf("") }
     val sexoState = remember { mutableStateOf<String?>(null) }
     val celularState = remember { mutableStateOf("") }
@@ -52,22 +57,22 @@ fun FormularioCliente(navController: NavController, clientesViewModel: ClientesV
 
     val listaSexos = listOf("Masculino", "Feminino")
 
-    if (currentIndex != null) {
-        val cliente = clientesViewModel.getListaClientes()[currentIndex]
-        idState.value = cliente.id as String
-        nomeState.value = cliente.nome
-        sexoState.value = cliente.sexo
-        celularState.value = cliente.celular
-        emailState.value = cliente.email
-        cidadeState.value = cliente.cidade
-        enderecoState.value = cliente.endereco
+    if (clienteSelecionado != null) {
+
+        idState.value = clienteSelecionado.id as String
+        nomeState.value = clienteSelecionado.nome
+        sexoState.value = clienteSelecionado.sexo
+        celularState.value = clienteSelecionado.celular
+        emailState.value = clienteSelecionado.email
+        cidadeState.value = clienteSelecionado.cidade
+        enderecoState.value = clienteSelecionado.endereco
     }
 
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = if (currentIndex != null) "Atualizar cliente" else "Cadastrar cliente") },
+                title = { Text(text = if (clienteSelecionado != null) "Atualizar cliente" else "Cadastrar cliente") },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate("clientes") }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
@@ -154,7 +159,7 @@ fun FormularioCliente(navController: NavController, clientesViewModel: ClientesV
                 Button(
                     onClick = {
                         val cliente = Cliente(
-                            if (currentIndex == null) null else idState.value,
+                            if (clienteSelecionado != null) clienteSelecionado.id else null,
                             nomeState.value,
                             sexoState.value ?: "",
                             celularState.value,
@@ -162,52 +167,33 @@ fun FormularioCliente(navController: NavController, clientesViewModel: ClientesV
                             cidadeState.value,
                             enderecoState.value
                         )
-                        if (currentIndex == null) {
-                            clientesViewModel.addCliente(
-                                cliente = cliente, callback = { response ->
-                                    if (response) {
-                                        Toast.makeText(
-                                            context,
-                                            "Cliente cadastrado com sucesso",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                    }else{
-                                        Toast.makeText(
-                                            context,
-                                            "Falha no cadastro de cliente, tente novamente",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                    }
-                                }
-                            )
-//
-
-                        } else {
-                            clientesViewModel.update(
-                                cliente,
-                                callback = { response ->
-                                    if (response) {
-                                        Toast.makeText(
-                                            context,
-                                            "Cliente atualizado com sucesso",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                    }else{
-                                        Toast.makeText(
-                                            context,
-                                            "Falha ao atualizar cliente, tente novamente",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                    }}
-                            )
+                        scope.launch(Dispatchers.IO) {
+                            clientesVM.salvarCliente(cliente);
                         }
-                        clientesViewModel.changeIndex(null);
-                        navController.navigate("clientes");
+
+                        scope.launch(Dispatchers.Main) {
+                            if (clienteSelecionado != null) {
+                                Toast.makeText(
+                                    context,
+                                    "Cliente cadastrado com sucesso",
+                                    Toast.LENGTH_LONG
+                                )
+                                    .show()
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Cliente atualizado com sucesso",
+                                    Toast.LENGTH_LONG
+                                )
+                                    .show()
+                            }
+                            navController.popBackStack()
+                        }
                     },
                     enabled = isEmailValid(emailState.value) && nomeState.value.isNotBlank() && celularState.value.isNotBlank() && cidadeState.value.isNotBlank() && enderecoState.value.isNotBlank(),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = if (currentIndex != null) "Atualizar" else "Cadastrar")
+                    Text(text = if (clienteSelecionado != null) "Atualizar" else "Cadastrar")
                 }
             }
         },

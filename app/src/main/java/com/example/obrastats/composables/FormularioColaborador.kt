@@ -42,7 +42,6 @@ fun FormularioColaborador(
     colaboradoresVM : ColaboradoresViewModel
 ) {
     var colaboradorSelecionado = colaboradoresVM.getColaboradorSelecionado()
-    val currentIndex: Int? = colaboradoresVM.getCurrentIndex();
 
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -70,7 +69,7 @@ fun FormularioColaborador(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = if (currentIndex != null) "Atualizar colaborador" else "Cadastrar colaborador") },
+                title = { Text(text = if (colaboradorSelecionado != null) "Atualizar colaborador" else "Cadastrar colaborador") },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate("colaboradores") }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
@@ -178,7 +177,7 @@ fun FormularioColaborador(
 
                         }
                         scope.launch(Dispatchers.Main) {
-                            if (currentIndex == null) {
+                            if (colaboradorSelecionado != null) {
                                 Toast.makeText(
                                     context,
                                     "Colaborador cadastrado com sucesso",
@@ -193,14 +192,13 @@ fun FormularioColaborador(
                                 )
                                     .show()
                             }
-//                            colaboradoresViewModel.changeIndex(null);
                             navController.popBackStack()
                         }
                     },
                     enabled = nomeState.value.isNotBlank() && profissaoState.value.isNotBlank() && (sexoState.value?.isNotBlank() == true) && modeloContratoState.value != null && celularState.value.isNotBlank() && emailState.value.isNotBlank() && cidadeState.value.isNotBlank() && enderecoState.value.isNotBlank(),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = if (currentIndex != null) "Atualizar" else "Cadastrar")
+                    Text(text = if (colaboradorSelecionado != null) "Atualizar" else "Cadastrar")
                 }
             }
         })

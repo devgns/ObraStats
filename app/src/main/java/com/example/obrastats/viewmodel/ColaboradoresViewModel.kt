@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class ColaboradoresViewModel {
-    private var currentIndex: Int? = null
     private val db = FirebaseFirestore.getInstance()
     private val _colaboradores = MutableStateFlow<MutableList<Colaborador>>(mutableListOf())
     val colaboradores: StateFlow<MutableList<Colaborador>> = _colaboradores;
@@ -22,27 +21,6 @@ class ColaboradoresViewModel {
 
     fun getColaboradorSelecionado(): Colaborador? {
         return colaboradores.value.find { it.id == selectedId }
-    }
-
-    fun getColaboradoresList(): List<Colaborador> {
-        return mutableListOf()
-//        return listaColaboradores
-    }
-
-    fun addColaborador(colaborador: Colaborador) {
-//        listaColaboradores.add(colaborador)
-    }
-
-    fun getCurrentIndex(): Int? {
-        return currentIndex
-    }
-
-    fun changeIndex(newIndex: Int?) {
-
-    }
-
-    fun updateColaboradorAtIndex(index: Int, novoColaborador: Colaborador) {
-
     }
 
     suspend fun getColaboradores(): Flow<MutableList<Colaborador>> {
