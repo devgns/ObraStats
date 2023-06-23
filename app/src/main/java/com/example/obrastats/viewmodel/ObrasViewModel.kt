@@ -2,9 +2,11 @@ package com.example.obrastats.viewmodel
 
 import com.example.obrastats.classes.Cliente
 import com.example.obrastats.classes.Obra
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ObrasViewModel {
     private var currentIndex: Int? = null
+    private var db = FirebaseFirestore.getInstance()
 
     private val obras: MutableList<Obra> = mutableListOf(
         Obra(
@@ -79,4 +81,7 @@ class ObrasViewModel {
             obras[index] = novaObra
         }
     }
+//    fun getObras(){
+//        db.collection("obras")
+//    }
 }

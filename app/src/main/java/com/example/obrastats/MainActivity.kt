@@ -49,46 +49,42 @@ import com.example.obrastats.viewmodel.ObrasViewModel
 class MainActivity : ComponentActivity() {
 
     val clientesViewModel: ClientesViewModel = ClientesViewModel();
-    val colaboradoresViewModel: ColaboradoresViewModel = ColaboradoresViewModel();
+   val colaboradoresViewModel: ColaboradoresViewModel = ColaboradoresViewModel();
     val obrasViewModel: ObrasViewModel = ObrasViewModel();
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContent {
             ObraStatsTheme {
                 val navController = rememberNavController()
-                clientesViewModel.fetchClientes();
-                NavHost(navController = navController, startDestination = "home"){
-                    composable("home"){
+                NavHost(navController = navController, startDestination = "home") {
+                    composable("home") {
                         MainScreen(navController)
                     }
-                    navigation("lista", "clientes") {
 
-                        composable("lista") {
-                            TelaPrincipalClientes(navController,clientesViewModel)
-                        }
-                        composable("criar-editar-cliente") {
-                            FormularioCliente(navController,clientesViewModel)
-                        }
+                    composable("lista-clientes") {
+                        TelaPrincipalClientes(navController, clientesViewModel)
+                    }
+                    composable("criar-editar-cliente") {
+                        FormularioCliente(navController, clientesViewModel)
                     }
 
-                    navigation("lista", "colaboradores"){
-                        composable("lista"){
-                            TelaPrincipalColaboradores(navController, colaboradoresViewModel)
-                        }
-                        composable("criar-editar-colaborador"){
-                            FormularioColaborador(navController, colaboradoresViewModel)
-                        }
+                    composable("lista-colaboradores") {
+                        TelaPrincipalColaboradores(navController, colaboradoresViewModel)
+                    }
+                    composable("criar-editar-colaborador") {
+                        FormularioColaborador(navController)
                     }
 
-                    navigation("lista", "obras"){
-                        composable("lista"){
-                            TelaPrincipalObras(navController, obrasViewModel)
-                        }
-                        composable("criar-editar-obra"){
-                            FormularioObra(navController, obrasViewModel, clientesViewModel)
-                        }
+                    composable("lista-obras") {
+                        TelaPrincipalObras(navController, obrasViewModel)
                     }
+                    composable("criar-editar-obra") {
+                        FormularioObra(navController, obrasViewModel, clientesViewModel)
+                    }
+
                 }
 
             }
@@ -101,9 +97,9 @@ fun MainScreen(navController: NavController, modifier: Modifier = Modifier.fillM
     val selectedItem = remember { mutableStateOf(-1) }
 
     val menuItems = listOf(
-        R.string.clientes to "clientes",
-        R.string.obras to "obras",
-        R.string.colaboradores to "colaboradores",
+        R.string.clientes to "lista-clientes",
+        R.string.obras to "lista-obras",
+        R.string.colaboradores to "lista-colaboradores",
     ).map { MenuItemRouteStringPair(it.first, it.second) }
 
     LazyVerticalGrid(
@@ -126,10 +122,9 @@ fun MainScreen(navController: NavController, modifier: Modifier = Modifier.fillM
 @Composable
 fun MenuButton(
     @StringRes text: Int,
-     route: String,
+    route: String,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary
@@ -163,9 +158,10 @@ fun InitialMenuPreview() {
         MainScreen(navController)
     }
 }
+
 private data class MenuItemRouteStringPair(
     @StringRes val text: Int,
-     val route: String
+    val route: String
 )
 
 

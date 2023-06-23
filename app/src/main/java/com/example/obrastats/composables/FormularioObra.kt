@@ -23,6 +23,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -40,6 +41,8 @@ import com.example.obrastats.viewmodel.ObrasViewModel
 fun FormularioObra(navController: NavController, obrasViewModel: ObrasViewModel, clientesViewModel: ClientesViewModel) {
 
     val currentIndex: Int? = obrasViewModel.getCurrentIndex();
+
+    val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
     val nomeState = remember { mutableStateOf("") }

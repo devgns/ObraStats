@@ -1,5 +1,6 @@
 package com.example.obrastats.composables
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Alignment
 import androidx.compose.material.*
@@ -14,14 +15,84 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.obrastats.viewmodel.ColaboradoresViewModel
+import kotlinx.coroutines.launch
+
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun TelaPrincipalColaboradores(navController: NavController) {
+//    val colaboradoresVM = ColaboradoresViewModel()
+//    val colaboradores = colaboradoresVM.colaboradores.collectAsState(initial = mutableListOf()).value;
+//    val scope = rememberCoroutineScope()
+//    LaunchedEffect(Unit) {
+//        scope.launch {
+//            colaboradoresVM.getColaboradores()
+//        }
+//    }
+//    LaunchedEffect(Unit) {
+//        colaboradoresVM.colaboradores.collect {
+//            Log.d("Colaboradores", it.toString())
+//        }
+//    }
+//
+//    Scaffold(
+//        topBar = {
+//            TopAppBar(
+//                title = { Text(text = "Colaboradores") },
+//                navigationIcon = {
+//                    IconButton(onClick = {navController.navigate("home") }) {
+//                        Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
+//                    }
+//                }
+//            )
+//        },
+//        content = { paddingValues ->
+//            Column(
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .padding(paddingValues),
+//            ) {
+//                ListaColaboradores(navController, colaboradores)
+//            }
+//        },
+//        floatingActionButton = {
+//            FloatingActionButton(
+//                onClick = {
+////                    colaboradoresViewModel.changeIndex(null);
+//                    navController.navigate("criar-editar-colaborador") },
+//                modifier = Modifier
+//                    .padding(16.dp),
+//            ) {
+//                Row(
+//                    verticalAlignment = Alignment.CenterVertically,
+//                    modifier = Modifier.padding(horizontal = 6.dp)
+//                ) {
+//                    Icon(Icons.Default.Add, contentDescription = "Adicionar")
+//                    Text("Adicionar")
+//                }
+//            }
+//        }
+//    )
+//}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TelaPrincipalColaboradores(navController: NavController, colaboradoresViewModel: ColaboradoresViewModel) {
+fun TelaPrincipalColaboradores(navController: NavController,  colaboradoresVM: ColaboradoresViewModel) {
+
+    val colaboradoresState = colaboradoresVM.colaboradores.collectAsState(initial = mutableListOf())
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(Unit) {
+        scope.launch {
+            colaboradoresVM.getColaboradores()
+        }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -39,13 +110,13 @@ fun TelaPrincipalColaboradores(navController: NavController, colaboradoresViewMo
                     .fillMaxSize()
                     .padding(paddingValues),
             ) {
-                ListaColaboradores(navController, colaboradoresViewModel)
+                ListaColaboradores(navController, colaboradoresState.value)
             }
         },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    colaboradoresViewModel.changeIndex(null);
+//                    colaboradoresViewModel.changeIndex(null);
                     navController.navigate("criar-editar-colaborador") },
                 modifier = Modifier
                     .padding(16.dp),

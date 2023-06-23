@@ -1,5 +1,6 @@
 package com.example.obrastats.composables
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +22,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -30,15 +32,19 @@ import androidx.navigation.NavController
 import com.example.obrastats.classes.Colaborador
 import com.example.obrastats.enums.ModeloDeContratacaoEnum
 import com.example.obrastats.viewmodel.ColaboradoresViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioColaborador(
     navController: NavController,
-    colaboradoresViewModel: ColaboradoresViewModel
 ) {
+    val colaboradoresVM = ColaboradoresViewModel()
 
-    val currentIndex: Int? = colaboradoresViewModel.getCurrentIndex();
+    val currentIndex: Int? = colaboradoresVM.getCurrentIndex();
+
+    val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
     val nomeState = remember { mutableStateOf("") }
@@ -52,7 +58,7 @@ fun FormularioColaborador(
     val listaSexos = listOf("Masculino", "Feminino");
 
     if (currentIndex != null) {
-        val colaborador = colaboradoresViewModel.getColaboradoresList()[currentIndex]
+        val colaborador = colaboradoresVM.getColaboradoresList()[currentIndex]
         nomeState.value = colaborador.nome
         profissaoState.value = colaborador.profissao
         modeloContratoState.value = colaborador.modeloDeContrato
@@ -65,7 +71,7 @@ fun FormularioColaborador(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = if(currentIndex != null) "Atualizar colaborador" else "Cadastrar colaborador") },
+                title = { Text(text = if (currentIndex != null) "Atualizar colaborador" else "Cadastrar colaborador") },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate("colaboradores") }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
@@ -167,24 +173,43 @@ fun FormularioColaborador(
                             cidadeState.value,
                             enderecoState.value
                         )
-                        if (currentIndex == null) {
-                            colaboradoresViewModel.addColaborador(colaborador);
-                            Toast.makeText(context, "Colaborador cadastrado com sucesso", Toast.LENGTH_LONG)
-                                .show()
+                        scope.launch(Dispatchers.IO) {
+                            if (currentIndex == null) {
+                                Log.i("io", "aqui")
+                                colaboradoresVM.salvarColaborador(colaborador);
 
-                        } else {
-                            colaboradoresViewModel.updateColaboradorAtIndex(currentIndex, colaborador);
-                            Toast.makeText(context, "Colaborador atualizado com sucesso", Toast.LENGTH_LONG)
-                                .show()
+                            } else {
+                                colaboradoresVM.updateColaboradorAtIndex(
+                                    currentIndex,
+                                    colaborador
+                                );
+                            }
                         }
-                        colaboradoresViewModel.changeIndex(null);
-                        navController.navigate("colaboradores");
 
+                        scope.launch(Dispatchers.Main) {
+                            if (currentIndex == null) {
+                                Toast.makeText(
+                                    context,
+                                    "Colaborador cadastrado com sucesso",
+                                    Toast.LENGTH_LONG
+                                )
+                                    .show()
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Colaborador atualizado com sucesso",
+                                    Toast.LENGTH_LONG
+                                )
+                                    .show()
+                            }
+//                            colaboradoresViewModel.changeIndex(null);
+                            navController.popBackStack()
+                        }
                     },
                     enabled = nomeState.value.isNotBlank() && profissaoState.value.isNotBlank() && (sexoState.value?.isNotBlank() == true) && modeloContratoState.value != null && celularState.value.isNotBlank() && emailState.value.isNotBlank() && cidadeState.value.isNotBlank() && enderecoState.value.isNotBlank(),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = if(currentIndex != null) "Atualizar" else "Cadastrar")
+                    Text(text = if (currentIndex != null) "Atualizar" else "Cadastrar")
                 }
 
             }

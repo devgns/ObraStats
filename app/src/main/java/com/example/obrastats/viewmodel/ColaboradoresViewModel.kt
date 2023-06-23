@@ -1,53 +1,29 @@
 package com.example.obrastats.viewmodel
 
+import android.util.Log
 import com.example.obrastats.classes.Colaborador
 import com.example.obrastats.enums.ModeloDeContratacaoEnum
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class ColaboradoresViewModel {
     private var currentIndex: Int? = null
+    private val db = FirebaseFirestore.getInstance()
+    private val _colaboradores = MutableStateFlow<MutableList<Colaborador>>(mutableListOf())
+     val colaboradores: StateFlow<MutableList<Colaborador>> = _colaboradores;
+    private val selectedId: String? = null
 
-    val colaboradores: MutableList<Colaborador> = mutableListOf(
-        Colaborador(
-            id = 1,
-            nome = "Colaborador 1",
-            profissao = "Engenheiro",
-            modeloDeContrato = ModeloDeContratacaoEnum.DIARISTA,
-            sexo = "Masculino",
-            celular = "34999999999",
-            email = "colaborador1@example.com",
-            cidade = "Uberaba",
-            endereco = "Rua A"
-        ),
-        Colaborador(
-            id = 2,
-            nome = "Colaborador 2",
-            profissao = "Arquiteto",
-            modeloDeContrato = ModeloDeContratacaoEnum.EFETIVO,
-            sexo = "Feminino",
-            celular = "34888888888",
-            email = "colaborador2@example.com",
-            cidade = "Uberlândia",
-            endereco = "Rua B"
-        ),
-        Colaborador(
-            id = 3,
-            nome = "Colaborador 3",
-            profissao = "Pedreiro",
-            modeloDeContrato = ModeloDeContratacaoEnum.DIARISTA,
-            sexo = "Masculino",
-            celular = "34777777777",
-            email = "colaborador3@example.com",
-            cidade = "Uberlândia",
-            endereco = "Rua C"
-        )
-    )
+//    fun setSelectedId(id:)
 
     fun getColaboradoresList(): List<Colaborador> {
-        return colaboradores
+        return mutableListOf()
+//        return listaColaboradores
     }
 
     fun addColaborador(colaborador: Colaborador) {
-        colaboradores.add(colaborador)
+//        listaColaboradores.add(colaborador)
     }
 
     fun getCurrentIndex(): Int? {
@@ -55,16 +31,53 @@ class ColaboradoresViewModel {
     }
 
     fun changeIndex(newIndex: Int?) {
-        if (newIndex == null) {
-            currentIndex = newIndex
-        } else if (newIndex >= 0 && newIndex < colaboradores.size) {
-            currentIndex = newIndex
-        }
+
     }
 
     fun updateColaboradorAtIndex(index: Int, novoColaborador: Colaborador) {
-        if (index >= 0 && index < colaboradores.size) {
-            colaboradores[index] = novoColaborador
+
+    }
+
+    suspend fun getColaboradores(): Flow<MutableList<Colaborador>> {
+        val listaColaboradores: MutableList<Colaborador> = mutableListOf()
+        db.collection("colaborador").get().addOnSuccessListener { result ->
+            for (document in result) {
+                val colaborador = document.data
+                listaColaboradores.add(
+                    Colaborador(
+                        id = document.id,
+                        nome = colaborador["nome"] as String,
+                        profissao = colaborador["profissao"] as String,
+                        modeloDeContrato =
+                        ModeloDeContratacaoEnum.valueOf(colaborador["modeloDeContrato"] as String),
+                        sexo = colaborador["sexo"] as String,
+                        celular = colaborador["celular"] as String,
+                        email = colaborador["email"] as String,
+                        cidade = colaborador["cidade"] as String,
+                        endereco = colaborador["endereco"] as String
+                    )
+                );
+                _colaboradores.value = listaColaboradores;
+            }
+        }
+        return colaboradores;
+    }
+
+
+    fun salvarColaborador(colaborador: Colaborador) {
+
+        val colaboradorMap = hashMapOf(
+            "nome" to colaborador.nome,
+            "profissao" to colaborador.profissao,
+            "modeloDeContrato" to colaborador.modeloDeContrato,
+            "sexo" to colaborador.sexo,
+            "celular" to colaborador.celular,
+            "email" to colaborador.email,
+            "cidade" to colaborador.cidade,
+            "endereco" to colaborador.endereco
+        )
+        db.collection("colaborador").document().set(colaboradorMap).addOnCompleteListener {
+
         }
     }
 }

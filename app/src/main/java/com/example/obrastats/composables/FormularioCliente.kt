@@ -40,7 +40,7 @@ fun FormularioCliente(navController: NavController, clientesViewModel: ClientesV
     val currentIndex: Int? = clientesViewModel.getCurrentIndex();
     val context = LocalContext.current
 
-
+    val idState = remember { mutableStateOf("")}
     val nomeState = remember { mutableStateOf("") }
     val sexoState = remember { mutableStateOf<String?>(null) }
     val celularState = remember { mutableStateOf("") }
@@ -54,6 +54,7 @@ fun FormularioCliente(navController: NavController, clientesViewModel: ClientesV
 
     if (currentIndex != null) {
         val cliente = clientesViewModel.getListaClientes()[currentIndex]
+        idState.value = cliente.id as String
         nomeState.value = cliente.nome
         sexoState.value = cliente.sexo
         celularState.value = cliente.celular
@@ -153,7 +154,7 @@ fun FormularioCliente(navController: NavController, clientesViewModel: ClientesV
                 Button(
                     onClick = {
                         val cliente = Cliente(
-                            null,
+                            if (currentIndex == null) null else idState.value,
                             nomeState.value,
                             sexoState.value ?: "",
                             celularState.value,
@@ -182,16 +183,23 @@ fun FormularioCliente(navController: NavController, clientesViewModel: ClientesV
 //
 
                         } else {
-                            clientesViewModel.updateClienteAtIndex(
-                                currentIndex,
-                                cliente
+                            clientesViewModel.update(
+                                cliente,
+                                callback = { response ->
+                                    if (response) {
+                                        Toast.makeText(
+                                            context,
+                                            "Cliente atualizado com sucesso",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }else{
+                                        Toast.makeText(
+                                            context,
+                                            "Falha ao atualizar cliente, tente novamente",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }}
                             )
-                            Toast.makeText(
-                                context,
-                                "Cliente atualizado com sucesso",
-                                Toast.LENGTH_LONG
-                            ).show()
-
                         }
                         clientesViewModel.changeIndex(null);
                         navController.navigate("clientes");
