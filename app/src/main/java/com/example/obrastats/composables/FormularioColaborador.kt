@@ -71,7 +71,7 @@ fun FormularioColaborador(
             TopAppBar(
                 title = { Text(text = if (colaboradorSelecionado != null) "Atualizar colaborador" else "Cadastrar colaborador") },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigate("colaboradores") }) {
+                    IconButton(onClick = { navController.navigate("lista-colaboradores") }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
                     }
                 }
@@ -79,7 +79,7 @@ fun FormularioColaborador(
         },
         content = { paddingValues ->
             Column(
-                modifier = Modifier.padding(paddingValues)
+                modifier = Modifier.padding(paddingValues).padding(16.dp)
             ) {
                 Text("Cadastro de Colaborador", style = TextStyle(fontSize = 20.sp))
 

@@ -65,14 +65,14 @@ fun FormularioObra(navController: NavController, obrasVM: ObrasViewModel, client
             TopAppBar(
                 title = { Text(text = if(false) "Atualizar obra" else "Cadastrar obra") },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigate("obras") }) {
+                    IconButton(onClick = { navController.navigate("lista-obras") }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
                     }
                 }
             )
         },
         content = { paddingValues ->
-            Column(modifier = Modifier.padding(paddingValues)) {
+            Column(modifier = Modifier.padding(paddingValues).padding(16.dp)) {
                 Text("Cadastro de Obra", style = TextStyle(fontSize = 20.sp))
 
                 Spacer(modifier = Modifier.height(16.dp))

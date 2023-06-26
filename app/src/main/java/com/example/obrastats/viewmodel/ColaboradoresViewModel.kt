@@ -27,6 +27,7 @@ class ColaboradoresViewModel {
         val listaColaboradores: MutableList<Colaborador> = mutableListOf()
         db.collection("colaborador").get().addOnSuccessListener { result ->
             for (document in result) {
+                Log.i("document", document.toString())
                 val colaborador = document.data
                 listaColaboradores.add(
                     Colaborador(
@@ -45,6 +46,7 @@ class ColaboradoresViewModel {
                 _colaboradores.value = listaColaboradores;
             }
         }
+        Log.i("saiu","saiu")
         return colaboradores;
     }
 

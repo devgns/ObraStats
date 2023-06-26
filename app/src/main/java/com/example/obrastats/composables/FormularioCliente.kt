@@ -74,7 +74,7 @@ fun FormularioCliente(navController: NavController, clientesVM: ClientesViewMode
             TopAppBar(
                 title = { Text(text = if (clienteSelecionado != null) "Atualizar cliente" else "Cadastrar cliente") },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigate("clientes") }) {
+                    IconButton(onClick = { navController.navigate("lista-clientes") }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
                     }
                 }
@@ -82,7 +82,7 @@ fun FormularioCliente(navController: NavController, clientesVM: ClientesViewMode
         },
         content = { paddingValues ->
             Column(
-                modifier = Modifier.padding(paddingValues),
+                modifier = Modifier.padding(paddingValues).padding(16.dp),
             ) {
                 Text("Cadastro de Cliente", style = TextStyle(fontSize = 20.sp))
 

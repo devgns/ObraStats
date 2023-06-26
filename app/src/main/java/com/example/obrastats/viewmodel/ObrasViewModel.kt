@@ -9,6 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.tasks.await
 
 class ObrasViewModel {
     private val db = FirebaseFirestore.getInstance()
@@ -25,37 +26,30 @@ class ObrasViewModel {
         return obras.value.find { it.id == selectedId }
     }
 
-    suspend fun getObras(): StateFlow<MutableList<Obra>> {
-        val listaObras: MutableList<Obra> = mutableListOf()
-        db.collection("obra").get().addOnSuccessListener { result ->
-            Log.i("obra",result.toString())
-
-            for (document in result) {
-                val obra = document.data
-                val cliente = Cliente(
-                    id = obra["cliente.id"] as String,
-                    nome = obra["cliente.nome"] as String,
-                    sexo = obra["cliente.sexo"] as String,
-                    celular = obra["cliente.celular"] as String,
-                    email = obra["cliente.email"] as String,
-                    cidade = obra["cliente.cidade"] as String,
-                    endereco = obra["cliente.endereco"] as String
-                )
-                listaObras.add(
-                    Obra(
-                        id = document.id,
-                        nome = obra["nome"] as String,
-                        cliente = cliente,
-                        cidade = obra["cidade"] as String,
-                        endereco = obra["endereco"] as String
-                    )
-                )
-            }
-            _obras.value = listaObras
-        }
-        return obras
+suspend fun getObras(): StateFlow<MutableList<Obra>> {
+    val listaObras: MutableList<Obra> = mutableListOf()
+    db.collection("obra").get().await().forEach { document ->
+        val obraData = document.data
+        val obra = Obra(
+            id = document.id,
+            nome = obraData["nome"] as String,
+            cliente = Cliente(
+                id = null,
+                nome = (obraData["cliente"] as HashMap<*, *>)["nome"] as String,
+                sexo = (obraData["cliente"] as HashMap<*, *>)["sexo"] as String,
+                celular = (obraData["cliente"] as HashMap<*, *>)["celular"] as String,
+                email = (obraData["cliente"] as HashMap<*, *>)["email"] as String,
+                cidade = (obraData["cliente"] as HashMap<*, *>)["cidade"] as String,
+                endereco = (obraData["cliente"] as HashMap<*, *>)["endereco"] as String
+            ),
+            cidade = obraData["cidade"] as String,
+            endereco = obraData["endereco"] as String
+        )
+        listaObras.add(obra)
     }
-
+    _obras.value = listaObras
+    return obras
+}
     fun salvarObra(obra: Obra) {
         val obraMap = hashMapOf(
             "nome" to obra.nome,
