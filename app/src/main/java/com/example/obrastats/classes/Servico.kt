@@ -3,9 +3,10 @@ import com.example.obrastats.enums.SituacaoServicoEnum
 import java.util.Date
 
 class Servico(
-    val id: Int?,
+    val id: String?,
+    val descricao: String,
     val obra: Obra,
-    val valorPrevisto: Double?,
+    val valorEstimado: Double?,
     val dataInicio: Date,
     val situacaoServico: SituacaoServicoEnum
 ) {
