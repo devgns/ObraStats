@@ -40,7 +40,8 @@ suspend fun getObras(): StateFlow<MutableList<Obra>> {
                 celular = (obraData["cliente"] as HashMap<*, *>)["celular"] as String,
                 email = (obraData["cliente"] as HashMap<*, *>)["email"] as String,
                 cidade = (obraData["cliente"] as HashMap<*, *>)["cidade"] as String,
-                endereco = (obraData["cliente"] as HashMap<*, *>)["endereco"] as String
+                endereco = (obraData["cliente"] as HashMap<*, *>)["endereco"] as String,
+                cpfCnpj = (obraData["cliente"] as HashMap<*, *>)["cpfCnpj"] as String?,
             ),
             cidade = obraData["cidade"] as String,
             endereco = obraData["endereco"] as String

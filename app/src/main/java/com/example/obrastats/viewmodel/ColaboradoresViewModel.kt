@@ -40,7 +40,8 @@ class ColaboradoresViewModel {
                         celular = colaborador["celular"] as String,
                         email = colaborador["email"] as String,
                         cidade = colaborador["cidade"] as String,
-                        endereco = colaborador["endereco"] as String
+                        endereco = colaborador["endereco"] as String,
+                        cpfCnpj = colaborador["cpfCnpj"] as String?
                     )
                 );
                 _colaboradores.value = listaColaboradores;
@@ -61,7 +62,8 @@ class ColaboradoresViewModel {
             "celular" to colaborador.celular,
             "email" to colaborador.email,
             "cidade" to colaborador.cidade,
-            "endereco" to colaborador.endereco
+            "endereco" to colaborador.endereco,
+            "cpfCnpj" to colaborador.cpfCnpj
         )
         if (colaborador.id != null) {
             db.collection("colaborador").document(colaborador.id).set(colaboradorMap)

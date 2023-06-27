@@ -43,6 +43,9 @@ fun ClienteCard(cliente: Cliente, onEditClicked: () -> Unit) {
             Text(text = "Sexo: ${cliente.sexo}")
             Text(text = "Celular: ${cliente.celular}")
             Text(text = "Email: ${cliente.email}")
+            if (cliente.cpfCnpj != null) {
+                Text(text = "CPF / CNPJ: ${cliente.cpfCnpj}")
+            }
             Text(text = "Cidade: ${cliente.cidade}")
             Text(text = "Endereço: ${cliente.endereco}")
         }

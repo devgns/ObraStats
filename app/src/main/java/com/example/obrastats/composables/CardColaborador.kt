@@ -49,6 +49,9 @@ fun ColaboradorCard(colaborador: Colaborador, onEditClicked: () -> Unit) {
             Text(text = "Profissão: ${colaborador.profissao}")
             Text(text = "Modelo de Contrato: ${colaborador.modeloDeContrato}")
             Text(text = "Sexo: ${colaborador.sexo}")
+            if (colaborador.cpfCnpj != null) {
+                Text(text = "CPF / CNPJ: ${colaborador.cpfCnpj}")
+            }
             Text(text = "Celular: ${colaborador.celular}")
             Text(text = "Email: ${colaborador.email}")
             Text(text = "Cidade: ${colaborador.cidade}")

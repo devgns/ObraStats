@@ -6,7 +6,8 @@ data class  Cliente(
     val celular: String,
     val email: String,
     val cidade: String,
-    val endereco: String
+    val endereco: String,
+    val cpfCnpj: String?
 ) {
 }
 

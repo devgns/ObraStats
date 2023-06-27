@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun FormularioColaborador(
     navController: NavController,
-    colaboradoresVM : ColaboradoresViewModel
+    colaboradoresVM: ColaboradoresViewModel
 ) {
     var colaboradorSelecionado = colaboradoresVM.getColaboradorSelecionado()
 
@@ -52,6 +52,7 @@ fun FormularioColaborador(
     val profissaoState = remember { mutableStateOf("") }
     val modeloContratoState = remember { mutableStateOf<ModeloDeContratacaoEnum?>(null) }
     val sexoState = remember { mutableStateOf<String?>(null) }
+    val cpfCnpjState = remember { mutableStateOf<String?>("") }
     val celularState = remember { mutableStateOf("") }
     val emailState = remember { mutableStateOf("") }
     val cidadeState = remember { mutableStateOf("") }
@@ -63,6 +64,7 @@ fun FormularioColaborador(
         profissaoState.value = colaboradorSelecionado.profissao
         modeloContratoState.value = colaboradorSelecionado.modeloDeContrato
         sexoState.value = colaboradorSelecionado.sexo
+        cpfCnpjState.value = colaboradorSelecionado.cpfCnpj ?: ""
         celularState.value = colaboradorSelecionado.celular
         emailState.value = colaboradorSelecionado.email
         cidadeState.value = colaboradorSelecionado.cidade
@@ -81,7 +83,10 @@ fun FormularioColaborador(
         },
         content = { paddingValues ->
             Column(
-                modifier = Modifier.padding(paddingValues).padding(16.dp).verticalScroll(rememberScrollState())
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState())
             ) {
                 Text("Cadastro de Colaborador", style = TextStyle(fontSize = 20.sp))
 
@@ -122,6 +127,20 @@ fun FormularioColaborador(
                         itemToString = { it }
                     )
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
+                val maxLength = 14 // O comprimento máximo permitido para CPF ou CNPJ formatado
+                OutlinedTextField(
+                    value = cpfCnpjState.value.toString(),
+                    onValueChange = { value ->
+                        if (value.length <= maxLength) {
+                            cpfCnpjState.value = value
+                        }
+                    },
+                    label = { Text("CPF ou CNPJ") },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                )
                 Spacer(modifier = Modifier.height(16.dp))
 
                 OutlinedTextField(
@@ -163,7 +182,7 @@ fun FormularioColaborador(
                 Button(
                     onClick = {
                         var colaborador = Colaborador(
-                            if(colaboradorSelecionado != null) colaboradorSelecionado.id else null,
+                            if (colaboradorSelecionado != null) colaboradorSelecionado.id else null,
                             nomeState.value,
                             profissaoState.value,
                             modeloContratoState.value ?: ModeloDeContratacaoEnum.DIARISTA,
@@ -171,7 +190,8 @@ fun FormularioColaborador(
                             celularState.value,
                             emailState.value,
                             cidadeState.value,
-                            enderecoState.value
+                            enderecoState.value,
+                            cpfCnpjState.value
                         )
                         scope.launch(Dispatchers.IO) {
 

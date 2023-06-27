@@ -37,7 +37,6 @@ import com.example.obrastats.viewmodel.ClientesViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioCliente(navController: NavController, clientesVM: ClientesViewModel) {
@@ -48,6 +47,7 @@ fun FormularioCliente(navController: NavController, clientesVM: ClientesViewMode
 
     val idState = remember { mutableStateOf("") }
     val nomeState = remember { mutableStateOf("") }
+    val cpfCnpjState = remember { mutableStateOf<String?>("") }
     val sexoState = remember { mutableStateOf<String?>(null) }
     val celularState = remember { mutableStateOf("") }
     val emailState = remember { mutableStateOf("") }
@@ -62,6 +62,7 @@ fun FormularioCliente(navController: NavController, clientesVM: ClientesViewMode
 
         idState.value = clienteSelecionado.id as String
         nomeState.value = clienteSelecionado.nome
+        cpfCnpjState.value = clienteSelecionado.cpfCnpj ?: ""
         sexoState.value = clienteSelecionado.sexo
         celularState.value = clienteSelecionado.celular
         emailState.value = clienteSelecionado.email
@@ -83,9 +84,12 @@ fun FormularioCliente(navController: NavController, clientesVM: ClientesViewMode
         },
         content = { paddingValues ->
             Column(
-                modifier = Modifier.padding(paddingValues).padding(16.dp).verticalScroll(
-                    rememberScrollState()
-                ),
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .padding(16.dp)
+                    .verticalScroll(
+                        rememberScrollState()
+                    ),
             ) {
                 Text("Cadastro de Cliente", style = TextStyle(fontSize = 20.sp))
 
@@ -108,6 +112,17 @@ fun FormularioCliente(navController: NavController, clientesVM: ClientesViewMode
                         itemToString = { it }
                     )
                 }
+                Spacer(modifier = Modifier.height(16.dp))
+                val maxLength = 14 // O comprimento máximo permitido para CPF ou CNPJ formatado
+                OutlinedTextField(
+                    value = cpfCnpjState.value.toString(),
+                    onValueChange = { value ->
+                        cpfCnpjState.value = value
+                    },
+                    label = { Text("CPF ou CNPJ") },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                )
                 Spacer(modifier = Modifier.height(16.dp))
 
 
@@ -168,7 +183,8 @@ fun FormularioCliente(navController: NavController, clientesVM: ClientesViewMode
                             celularState.value,
                             emailState.value,
                             cidadeState.value,
-                            enderecoState.value
+                            enderecoState.value,
+                            cpfCnpjState.value
                         )
                         scope.launch(Dispatchers.IO) {
                             clientesVM.salvarCliente(cliente);
@@ -210,6 +226,7 @@ fun isEmailValid(email: String): Boolean {
     val emailRegex = "[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}".toRegex()
     return email.matches(emailRegex)
 }
+
 
 @Preview(showBackground = true)
 @Composable

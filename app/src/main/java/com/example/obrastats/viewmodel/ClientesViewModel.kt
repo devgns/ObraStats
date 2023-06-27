@@ -39,7 +39,8 @@ class ClientesViewModel {
                             celular = cliente["celular"] as String,
                             email = cliente["email"] as String,
                             cidade = cliente["cidade"] as String,
-                            endereco = cliente["endereco"] as String
+                            endereco = cliente["endereco"] as String,
+                            cpfCnpj = cliente["cpfCnpj"] as String?
                         )
                     )
                 }
@@ -56,7 +57,8 @@ class ClientesViewModel {
             "celular" to cliente.celular,
             "email" to cliente.email,
             "cidade" to cliente.cidade,
-            "endereco" to cliente.endereco
+            "endereco" to cliente.endereco,
+            "cpfCnpj" to cliente.cpfCnpj
         )
 
         if (cliente.id != null) {
