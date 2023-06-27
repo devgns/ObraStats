@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -80,7 +82,9 @@ fun FormularioObra(navController: NavController, obrasVM: ObrasViewModel, client
             )
         },
         content = { paddingValues ->
-            Column(modifier = Modifier.padding(paddingValues).padding(16.dp)) {
+            Column(modifier = Modifier.padding(paddingValues).padding(16.dp).verticalScroll(
+                rememberScrollState()
+            )) {
                 Text("Cadastro de Obra", style = TextStyle(fontSize = 20.sp))
 
                 Spacer(modifier = Modifier.height(16.dp))
