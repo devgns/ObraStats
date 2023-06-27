@@ -42,7 +42,6 @@ fun FormularioCliente(navController: NavController, clientesVM: ClientesViewMode
 
     val clienteSelecionado = clientesVM.getClienteSelecionado();
     val scope = rememberCoroutineScope()
-
     val context = LocalContext.current
 
     val idState = remember { mutableStateOf("") }

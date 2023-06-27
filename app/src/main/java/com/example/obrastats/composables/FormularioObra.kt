@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,31 +35,38 @@ import com.example.obrastats.classes.Cliente
 import com.example.obrastats.classes.Obra
 import com.example.obrastats.viewmodel.ClientesViewModel
 import com.example.obrastats.viewmodel.ObrasViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioObra(navController: NavController, obrasVM: ObrasViewModel, clientesVM: ClientesViewModel) {
 
+    val obraSelecionada = obrasVM.getObraSelecionada();
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
+    val idState = remember { mutableStateOf("") }
     val nomeState = remember { mutableStateOf("") }
     val clienteState = remember { mutableStateOf<Cliente?>(null) }
     val cidadeState = remember { mutableStateOf("") }
     val enderecoState = remember { mutableStateOf("") }
 
-    val listaClientesState = remember { mutableStateListOf<Cliente>() }
+
+    val clientesState = clientesVM.clientes.collectAsState(initial = mutableListOf())
     LaunchedEffect(Unit) {
-//        val clientesList = clientesViewModel.getListaClientes()
-//        listaClientesState.addAll(clientesList)
+        scope.launch {
+            clientesVM.getClientes()
+        }
     }
 
-    if (false) {
-//        nomeState.value = obra.nome
-//        clienteState.value = obra.cliente
-//        cidadeState.value = obra.cidade
-//        enderecoState.value = obra.endereco
+    if (obraSelecionada != null) {
+        idState.value = obraSelecionada.id as String
+        nomeState.value = obraSelecionada.nome
+        clienteState.value = obraSelecionada.cliente
+        cidadeState.value = obraSelecionada.cidade
+        enderecoState.value = obraSelecionada.endereco
     }
     Scaffold(
         topBar = {
@@ -89,7 +97,7 @@ fun FormularioObra(navController: NavController, obrasVM: ObrasViewModel, client
 
                 Row(modifier = Modifier.fillMaxWidth()) {
                     dropDownForm(
-                        listaClientesState,
+                        clientesState.value,
                         placeHolder = "Cliente",
                         selectedItem = clienteState,
                         itemToString = {  it.nome }
@@ -120,37 +128,38 @@ fun FormularioObra(navController: NavController, obrasVM: ObrasViewModel, client
                 Button(
                     onClick = {
                         val obra = Obra(
-                            null,
+                            if(obraSelecionada != null) obraSelecionada.id else null,
                             nomeState.value,
-                            clienteState.value ?: Cliente(null, "", "", "", "", "", ""),
+                            clienteState.value as Cliente,
                             cidadeState.value,
                             enderecoState.value
                         )
-
-                        if (true) {
-//                            obrasViewModel.addObra(obra);
-                            Toast.makeText(
-                                context,
-                                "Obra cadastrada com sucesso",
-                                Toast.LENGTH_LONG
-                            )
-                                .show()
-                        } else {
-//                            obrasViewModel.updateObraAtIndex(1, obra);
-                            Toast.makeText(
-                                context,
-                                "Obra atualizada com sucesso",
-                                Toast.LENGTH_LONG
-                            )
-                                .show()
+                        scope.launch(Dispatchers.IO) {
+                            obrasVM.salvarObra(obra);
                         }
-//                        obrasViewModel.changeIndex(null);
-                        navController.navigate("obras");
+                        scope.launch(Dispatchers.Main) {
+                            if (obraSelecionada != null) {
+                                Toast.makeText(
+                                    context,
+                                    "Obra cadastrada com sucesso",
+                                    Toast.LENGTH_LONG
+                                )
+                                    .show()
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Obra atualizada com sucesso",
+                                    Toast.LENGTH_LONG
+                                )
+                                    .show()
+                            }
+                            navController.popBackStack()
+                        }
                     },
-                    enabled = nomeState.value.isNotBlank() && cidadeState.value.isNotBlank() && enderecoState.value.isNotBlank(),
+                    enabled = nomeState.value.isNotBlank() && cidadeState.value.isNotBlank() && enderecoState.value.isNotBlank() && clienteState.value != null,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = if (false) "Atualizar" else "Cadastrar")
+                    Text(text = if (obraSelecionada != null) "Atualizar" else "Cadastrar")
                 }
             }
 

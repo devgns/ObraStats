@@ -51,21 +51,30 @@ suspend fun getObras(): StateFlow<MutableList<Obra>> {
     return obras
 }
     fun salvarObra(obra: Obra) {
+
         val obraMap = hashMapOf(
             "nome" to obra.nome,
-            "cliente" to obra.cliente,
+            "cliente" to hashMapOf(
+                "id" to obra.cliente.id,
+                "nome" to obra.cliente.nome,
+                "sexo" to obra.cliente.sexo,
+                "celular" to obra.cliente.celular,
+                "email" to obra.cliente.email,
+                "cidade" to obra.cliente.cidade,
+                "endereco" to obra.cliente.endereco
+            ),
             "cidade" to obra.cidade,
             "endereco" to obra.endereco
         )
         if (obra.id != null) {
             db.collection("obra").document(obra.id).set(obraMap)
                 .addOnCompleteListener {
-
+                    Log.i("sucess", "Obra atualizada com sucesso")
                 }
         } else {
-            db.collection("obra").document().set(obraMap)
+            db.collection("obra").add(obraMap)
                 .addOnCompleteListener {
-
+                    Log.i("sucess", "Obra criada com sucesso")
                 }
         }
     }
