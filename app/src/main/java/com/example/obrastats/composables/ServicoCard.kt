@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
@@ -26,7 +27,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,9 +43,13 @@ import com.example.obrastats.classes.Servico
 import com.example.obrastats.enums.SituacaoServicoEnum
 import com.example.obrastats.viewmodel.ClientesViewModel
 import java.util.Date
+import androidx.compose.ui.res.painterResource
+import com.example.obrastats.R
 
 @Composable
 fun ServicoCard(servico: Servico, onEditClicked: () -> Unit) {
+    val context = LocalContext.current
+
     var expanded by remember { mutableStateOf<Boolean>(false) }
     Card(
         modifier = Modifier
@@ -84,7 +92,7 @@ fun ServicoCard(servico: Servico, onEditClicked: () -> Unit) {
                 ) {
 
                     Text(
-                        text = "Ver mais",
+                        text = "Mostrar mais",
                         style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp),
                         modifier = Modifier.padding(top = 5.dp)
                     )
@@ -101,18 +109,22 @@ fun ServicoCard(servico: Servico, onEditClicked: () -> Unit) {
         if (expanded) {
             Divider(modifier = Modifier.padding(vertical = 8.dp))
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
                     onClick = { /* Ação do botão "Lançar diárias" */ },
                     modifier = Modifier
-                        .padding(end = 4.dp).fillMaxWidth()
+                        .padding(horizontal = 4.dp)
+                        .fillMaxWidth()
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth() ) {
                         Text(text = "Lançar diárias")
                         Icon(
-                            Icons.Rounded.Add,
+                            imageVector = Icons.Default.AddCircle,
+                            tint = Color.White,
                             contentDescription = "Ícone de adição"
                         )
                     }
@@ -121,11 +133,12 @@ fun ServicoCard(servico: Servico, onEditClicked: () -> Unit) {
                     onClick = { /* Ação do botão "Lançar custos" */ },
                     modifier = Modifier
                         .padding(horizontal = 4.dp)
+                        .fillMaxWidth()
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween , modifier = Modifier.fillMaxWidth()) {
                         Text(text = "Lançar custos")
                         Icon(
-                            imageVector = Icons.Default.Add,
+                            imageVector = Icons.Default.AddCircle,
                             contentDescription = "Ícone de adição"
                         )
                     }
@@ -133,12 +146,13 @@ fun ServicoCard(servico: Servico, onEditClicked: () -> Unit) {
                 Button(
                     onClick = { /* Ação do botão "Lançar receitas" */ },
                     modifier = Modifier
-                        .padding(start = 4.dp)
+                        .padding(horizontal = 4.dp)
+                        .fillMaxWidth()
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(verticalAlignment = Alignment.CenterVertically,  horizontalArrangement = Arrangement.SpaceBetween , modifier = Modifier.fillMaxWidth()) {
                         Text(text = "Lançar receitas")
                         Icon(
-                            imageVector = Icons.Default.Add,
+                            imageVector = Icons.Default.AddCircle,
                             contentDescription = "Ícone de adição"
                         )
                     }
@@ -146,19 +160,19 @@ fun ServicoCard(servico: Servico, onEditClicked: () -> Unit) {
             }
             Divider(modifier = Modifier.padding(vertical = 8.dp))
             Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxWidth(),
 
             ) {
                 Button(
                     onClick = { /* Ação do botão "Linha do tempo" */ },
-                    modifier = Modifier
-                        .weight(0.5f)
-                        .padding(end = 4.dp).fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(0.6f)
+
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceAround ,modifier = Modifier.fillMaxWidth()) {
                         Text(text = "Linha do tempo")
                         Icon(
-                            imageVector = Icons.Default.Info,
+                            painterResource(id = R.drawable.history),
                             contentDescription = "Ícone da linha do tempo"
                         )
                     }
@@ -166,18 +180,39 @@ fun ServicoCard(servico: Servico, onEditClicked: () -> Unit) {
                 Button(
                     onClick = { /* Ação do botão "Ver estatísticas" */ },
                     modifier = Modifier
-                        .weight(0.5f)
-                        .padding(start = 4.dp)
+                        .fillMaxWidth(0.6f)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceAround ,modifier = Modifier.fillMaxWidth()) {
                         Text(text = "Ver estatísticas")
                         Icon(
-                            imageVector = Icons.Default.Info,
+                            painterResource(id = R.drawable.statistics),
                             contentDescription = "Ícone de estatísticas"
                         )
                     }
                 }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                ) {
+
+                    Text(
+                        text = "Mostrar menos",
+                        style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp),
+                        modifier = Modifier.padding(top = 5.dp)
+                    )
+                    Icon(
+                        Icons.Default.ArrowDropDown,
+                        contentDescription = "Clique para mais informações",
+                        modifier = Modifier
+                            .padding(start = 8.dp, top = 6.dp)
+                            .rotate(180f)
+                    )
+                }
             }
+
         }
     }
 }
