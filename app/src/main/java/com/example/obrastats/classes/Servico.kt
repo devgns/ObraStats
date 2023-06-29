@@ -5,9 +5,8 @@ data class Servico(
     var id: String?,
     val descricao: String,
     val obra: Obra,
-    val valorEstimado: Double,
+    val valorEstimado: Double?,
     val situacaoServico: SituacaoServicoEnum
 ) {
-
 }
 //    val dataInicio: LocalDate,

@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -33,6 +35,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.obrastats.classes.Cliente
 import com.example.obrastats.classes.Obra
 import com.example.obrastats.classes.Servico
@@ -40,7 +44,12 @@ import com.example.obrastats.enums.SituacaoServicoEnum
 import com.example.obrastats.R
 
 @Composable
-fun ServicoCard(servico: Servico, onEditClicked: () -> Unit, onDeleteClicked: () -> Unit) {
+fun ServicoCard(
+    navController: NavController,
+    servico: Servico,
+    onEditClicked: () -> Unit,
+    onDeleteClicked: () -> Unit
+) {
     val context = LocalContext.current
 
     var expanded by remember { mutableStateOf<Boolean>(false) }
@@ -63,6 +72,15 @@ fun ServicoCard(servico: Servico, onEditClicked: () -> Unit, onDeleteClicked: ()
                     modifier = Modifier.weight(1f)
                 )
                 IconButton(
+                    onClick = onDeleteClicked,
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Excluir obra",
+                        tint = Color.Red
+                    )
+                }
+                IconButton(
                     onClick = onEditClicked
                 ) {
                     Icon(
@@ -75,7 +93,7 @@ fun ServicoCard(servico: Servico, onEditClicked: () -> Unit, onDeleteClicked: ()
             Text(text = "Cliente: ${servico.obra.cliente.nome}")
             Text(text = "Valor Estimado: ${servico.valorEstimado}")
 //            Text(text = "Data de início: ${servico.dataInicio}")
-            Text(text = "Situação: ${servico.valorEstimado}")
+            Text(text = "Situação: ${servico.situacaoServico}")
 
             if (!expanded) {
                 Row(
@@ -107,12 +125,16 @@ fun ServicoCard(servico: Servico, onEditClicked: () -> Unit, onDeleteClicked: ()
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
-                    onClick = { /* Ação do botão "Lançar diárias" */ },
+                    onClick = { navController.navigate("todo") },
                     modifier = Modifier
                         .padding(horizontal = 4.dp)
                         .fillMaxWidth()
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth() ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
                         Text(text = "Lançar diárias")
                         Icon(
                             imageVector = Icons.Default.AddCircle,
@@ -122,12 +144,16 @@ fun ServicoCard(servico: Servico, onEditClicked: () -> Unit, onDeleteClicked: ()
                     }
                 }
                 Button(
-                    onClick = { /* Ação do botão "Lançar custos" */ },
+                    onClick = { navController.navigate("todo") },
                     modifier = Modifier
                         .padding(horizontal = 4.dp)
                         .fillMaxWidth()
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween , modifier = Modifier.fillMaxWidth()) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
                         Text(text = "Lançar custos")
                         Icon(
                             imageVector = Icons.Default.AddCircle,
@@ -136,12 +162,16 @@ fun ServicoCard(servico: Servico, onEditClicked: () -> Unit, onDeleteClicked: ()
                     }
                 }
                 Button(
-                    onClick = { /* Ação do botão "Lançar receitas" */ },
+                    onClick = { navController.navigate("todo") },
                     modifier = Modifier
                         .padding(horizontal = 4.dp)
                         .fillMaxWidth()
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically,  horizontalArrangement = Arrangement.SpaceBetween , modifier = Modifier.fillMaxWidth()) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
                         Text(text = "Lançar receitas")
                         Icon(
                             imageVector = Icons.Default.AddCircle,
@@ -155,13 +185,17 @@ fun ServicoCard(servico: Servico, onEditClicked: () -> Unit, onDeleteClicked: ()
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxWidth(),
 
-            ) {
+                ) {
                 Button(
-                    onClick = { /* Ação do botão "Linha do tempo" */ },
+                    onClick = { navController.navigate("todo") },
                     modifier = Modifier.fillMaxWidth(0.6f)
 
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceAround ,modifier = Modifier.fillMaxWidth()) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceAround,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
                         Text(text = "Linha do tempo")
                         Icon(
                             painterResource(id = R.drawable.history),
@@ -170,11 +204,15 @@ fun ServicoCard(servico: Servico, onEditClicked: () -> Unit, onDeleteClicked: ()
                     }
                 }
                 Button(
-                    onClick = { /* Ação do botão "Ver estatísticas" */ },
+                    onClick = { navController.navigate("todo") },
                     modifier = Modifier
                         .fillMaxWidth(0.6f)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceAround ,modifier = Modifier.fillMaxWidth()) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceAround,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
                         Text(text = "Ver estatísticas")
                         Icon(
                             painterResource(id = R.drawable.statistics),
@@ -213,7 +251,7 @@ fun ServicoCard(servico: Servico, onEditClicked: () -> Unit, onDeleteClicked: ()
 @Preview
 @Composable
 fun ServicoCardPreview() {
-//    val navController = rememberNavController()
+    val navController = rememberNavController()
     val cliente = Cliente(
         id = "1",
         nome = "João Silva",
@@ -241,5 +279,5 @@ fun ServicoCardPreview() {
 //        dataInicio = LocalDate.now(),
         situacaoServico = SituacaoServicoEnum.EMANDAMENTO
     )
-    ServicoCard(servico, { }, {})
+    ServicoCard(navController, servico, { }, {})
 }

@@ -41,6 +41,7 @@ import com.example.obrastats.composables.FormularioCliente
 import com.example.obrastats.composables.FormularioColaborador
 import com.example.obrastats.composables.FormularioObra
 import com.example.obrastats.composables.FormularioServico
+import com.example.obrastats.composables.TelaEmDesenvolvimento
 import com.example.obrastats.composables.TelaPrincipalColaboradores
 import com.example.obrastats.composables.TelaPrincipalObras
 import com.example.obrastats.composables.TelaPrincipalServicos
@@ -94,6 +95,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("criar-editar-servico") {
                         FormularioServico(navController, servicosViewModel, obrasViewModel)
+                    }
+                    composable("todo") {
+                        TelaEmDesenvolvimento(navController)
                     }
 
                 }

@@ -18,12 +18,13 @@ fun ListaServicos(navController: NavController, servicos: MutableList<Servico>, 
     } else {
         LazyColumn {
             itemsIndexed(servicos) { index, servico ->
-                ServicoCard(servico = servico, onEditClicked = {
+                ServicoCard(navController,servico = servico, onEditClicked = {
                     servicosVM.setSelectedId(servico.id)
                     Log.i("test", "adicionar-servico")
                     navController.navigate("criar-editar-servico")
                 },  onDeleteClicked = {
                     servicosVM.deletarServico(servico.id as String)
+                    navController.navigate("lista-servicos")
                     Log.i("test", "deletar-servico")
                 })
             }

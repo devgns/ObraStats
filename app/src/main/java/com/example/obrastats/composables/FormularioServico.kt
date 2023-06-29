@@ -85,15 +85,15 @@ fun FormularioServico(
         }
     }
 
-//    if (servicoSelecionado != null) {
-//        idState.value = servicoSelecionado.id as String
-//        descricaoState.value = servicoSelecionado.descricao
-//        obraState.value = servicoSelecionado.obra
-//        valorEstimadoState.value = servicoSelecionado.valorEstimado
-////        dataInicioState.value = servicoSelecionado.dataInicio
-//        situacaoServicoState.value = servicoSelecionado.situacaoServico
-//
-//    }
+    if (servicoSelecionado != null) {
+        idState.value = servicoSelecionado.id as String
+        descricaoState.value = servicoSelecionado.descricao
+        obraState.value = servicoSelecionado.obra
+        valorEstimadoState.value = servicoSelecionado.valorEstimado
+//        dataInicioState.value = servicoSelecionado.dataInicio
+        situacaoServicoState.value = servicoSelecionado.situacaoServico
+
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -198,7 +198,7 @@ fun FormularioServico(
                                 )
                                     .show()
                             }
-//                            navController.popBackStack()
+                            navController.popBackStack()
                         }
                     },
                     enabled = descricaoState.value.isNotBlank() && obraState.value != null && valorEstimadoState.value != null && (valorEstimadoState.value ?: 0.0 >= 0) && situacaoServicoState.value != null,

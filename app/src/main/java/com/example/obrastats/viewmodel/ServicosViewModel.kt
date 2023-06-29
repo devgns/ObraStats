@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.obrastats.classes.Cliente
 import com.example.obrastats.classes.Obra
 import com.example.obrastats.classes.Servico
+import com.example.obrastats.enums.ModeloDeContratacaoEnum
 import com.example.obrastats.enums.SituacaoServicoEnum
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,12 +32,13 @@ class ServicosViewModel {
             val listaServicos: MutableList<Servico> = mutableListOf()
             val querySnapshot = db.collection("servico").get().await()
             for (document in querySnapshot) {
+                Log.i("getServicos", document.toString())
                 val servicoData = document.data
                 val obraData = servicoData["obra"] as HashMap<*, *>
                 val clienteData = obraData["cliente"] as HashMap<*, *>
 
                 val cliente = Cliente(
-                    id = "1111",
+                    id =clienteData["nome"] as String?,
                     nome = clienteData["nome"] as String,
                     sexo = clienteData["sexo"] as String,
                     celular = clienteData["celular"] as String,
@@ -45,24 +47,27 @@ class ServicosViewModel {
                     endereco = clienteData["endereco"] as String,
                     cpfCnpj = clienteData["cpfCnpj"] as String?
                 )
+                Log.i("getServicos", cliente.toString())
 
                 val obra = Obra(
-                    id = "1111",
+                    id = obraData["nome"] as String?,
                     nome = obraData["nome"] as String,
                     cliente = cliente,
                     cidade = obraData["cidade"] as String,
                     endereco = obraData["endereco"] as String
                 )
+                Log.i("getServicos", obra.toString())
 
                 val servico = Servico(
-                    id = "1111",
+                    id = servicoData["id"] as String?,
                     descricao = servicoData["descricao"] as String,
                     obra = obra,
-                    valorEstimado = (obraData["valorEstimado"] as Number).toDouble(),
-                    situacaoServico = obraData["situacaoServico"] as SituacaoServicoEnum
+                    valorEstimado = 12.25,
+                    situacaoServico = SituacaoServicoEnum.valueOf(servicoData["situacaoServico"] as String),
                     //                dataInicio = obraData["dataInicio"] as LocalDate,
-
                 )
+                Log.i("getServicos", servico.toString())
+
                 listaServicos.add(servico)
             }
             _servicos.value = listaServicos
