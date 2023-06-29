@@ -1,6 +1,6 @@
 package com.example.obrastats.composables
 
-import android.widget.DatePicker
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,6 +22,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -35,16 +36,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.obrastats.classes.Cliente
 import com.example.obrastats.classes.Obra
-import com.example.obrastats.enums.ModeloDeContratacaoEnum
 import com.example.obrastats.enums.SituacaoServicoEnum
-import com.example.obrastats.viewmodel.ClientesViewModel
 import com.example.obrastats.viewmodel.ObrasViewModel
 import com.example.obrastats.viewmodel.ServicosViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import com.example.obrastats.classes.Servico
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,6 +65,17 @@ fun FormularioServico(
     val situacaoServicoState = remember { mutableStateOf<SituacaoServicoEnum?>(null) }
 
 
+//    val dateTime = LocalDateTime.now()
+//    val millis = dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+//
+//    val datePickerState = remember {
+//        DatePickerState(
+//            yearRange = (2000..2024),
+//            initialSelectedDateMillis =millis,
+//            initialDisplayMode = DisplayMode.Input,
+//            initialDisplayedMonthMillis = null
+//        )
+//    }
 
 
     val obrasState = obrasVM.obras.collectAsState(initial = mutableListOf())
@@ -75,15 +85,15 @@ fun FormularioServico(
         }
     }
 
-    if (servicoSelecionado != null) {
-        idState.value = servicoSelecionado.id as String
-        descricaoState.value = servicoSelecionado.descricao
-        obraState.value = servicoSelecionado.obra
-        valorEstimadoState.value = servicoSelecionado.valorEstimado
-        dataInicioState.value = servicoSelecionado.dataInicio
-        situacaoServicoState.value = servicoSelecionado.situacaoServico
-
-    }
+//    if (servicoSelecionado != null) {
+//        idState.value = servicoSelecionado.id as String
+//        descricaoState.value = servicoSelecionado.descricao
+//        obraState.value = servicoSelecionado.obra
+//        valorEstimadoState.value = servicoSelecionado.valorEstimado
+////        dataInicioState.value = servicoSelecionado.dataInicio
+//        situacaoServicoState.value = servicoSelecionado.situacaoServico
+//
+//    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -149,39 +159,50 @@ fun FormularioServico(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
 
-
+//                DatePicker(
+//                    state = datePickerState,
+//                    showModeToggle = true,
+//                    )
                 Button(
                     onClick = {
-//                        val obra = Obra(
-//                            if (obraSelecionada != null) obraSelecionada.id else null,
-//                            nomeState.value,
-//                            clienteState.value as Cliente,
-//                            cidadeState.value,
-//                            enderecoState.value
-//                        )
-//                        scope.launch(Dispatchers.IO) {
-//                            obrasVM.salvarObra(obra);
-//                        }
-//                        scope.launch(Dispatchers.Main) {
-//                            if (obraSelecionada != null) {
-//                                Toast.makeText(
-//                                    context,
-//                                    "Obra cadastrada com sucesso",
-//                                    Toast.LENGTH_LONG
-//                                )
-//                                    .show()
-//                            } else {
-//                                Toast.makeText(
-//                                    context,
-//                                    "Obra atualizada com sucesso",
-//                                    Toast.LENGTH_LONG
-//                                )
-//                                    .show()
-//                            }
+                        Log.i("servico", "descricaoState -> " +descricaoState.value )
+                        Log.i("servico", "obrasState -> " +obraState.value.toString() )
+                        Log.i("servico", "valorEstimadoState -> " +valorEstimadoState.value )
+                        Log.i("servico", "situacaoServicoState -> " +situacaoServicoState.value )
+
+                        val servico = Servico(
+                            if (servicoSelecionado != null) servicoSelecionado.id else null,
+                            descricaoState.value,
+                            obraState.value as Obra,
+                            valorEstimadoState.value as Double,
+                            situacaoServicoState.value as SituacaoServicoEnum
+                        )
+                        Log.i("servicoo", servico.toString())
+
+                        scope.launch(Dispatchers.IO) {
+                            servicosVM.salvarServico(servico);
+                        }
+                        scope.launch(Dispatchers.Main) {
+                            if (servicoSelecionado != null) {
+                                Toast.makeText(
+                                    context,
+                                    "Serviço cadastrado com sucesso",
+                                    Toast.LENGTH_LONG
+                                )
+                                    .show()
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Serviço atualizado com sucesso",
+                                    Toast.LENGTH_LONG
+                                )
+                                    .show()
+                            }
 //                            navController.popBackStack()
-//                        }
+                        }
                     },
-//                    enabled = nomeState.value.isNotBlank() && cidadeState.value.isNotBlank() && enderecoState.value.isNotBlank() && clienteState.value != null,
+                    enabled = descricaoState.value.isNotBlank() && obraState.value != null && valorEstimadoState.value != null && (valorEstimadoState.value ?: 0.0 >= 0) && situacaoServicoState.value != null,
+
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(text = if (servicoSelecionado != null) "Atualizar" else "Cadastrar")

@@ -7,12 +7,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -36,16 +33,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.rememberNavController
 import com.example.obrastats.classes.Cliente
 import com.example.obrastats.classes.Obra
 import com.example.obrastats.classes.Servico
 import com.example.obrastats.enums.SituacaoServicoEnum
-import com.example.obrastats.viewmodel.ClientesViewModel
-import java.util.Date
-import androidx.compose.ui.res.painterResource
 import com.example.obrastats.R
-import java.time.LocalDate
 
 @Composable
 fun ServicoCard(servico: Servico, onEditClicked: () -> Unit, onDeleteClicked: () -> Unit) {
@@ -82,7 +74,7 @@ fun ServicoCard(servico: Servico, onEditClicked: () -> Unit, onDeleteClicked: ()
             Text(text = "Obra: ${servico.obra.nome}")
             Text(text = "Cliente: ${servico.obra.cliente.nome}")
             Text(text = "Valor Estimado: ${servico.valorEstimado}")
-            Text(text = "Data de início: ${servico.dataInicio}")
+//            Text(text = "Data de início: ${servico.dataInicio}")
             Text(text = "Situação: ${servico.valorEstimado}")
 
             if (!expanded) {
@@ -246,7 +238,7 @@ fun ServicoCardPreview() {
         descricao = "Serviço de pintura",
         obra = obra,
         valorEstimado = 1500.0,
-        dataInicio = LocalDate.now(),
+//        dataInicio = LocalDate.now(),
         situacaoServico = SituacaoServicoEnum.EMANDAMENTO
     )
     ServicoCard(servico, { }, {})

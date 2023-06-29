@@ -1,5 +1,6 @@
 package com.example.obrastats.composables
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -138,6 +139,7 @@ fun FormularioObra(navController: NavController, obrasVM: ObrasViewModel, client
                             cidadeState.value,
                             enderecoState.value
                         )
+                        Log.i("obra", obra.toString() )
                         scope.launch(Dispatchers.IO) {
                             obrasVM.salvarObra(obra);
                         }

@@ -31,10 +31,10 @@ class ObrasViewModel {
         db.collection("obra").get().await().forEach { document ->
             val obraData = document.data
             val obra = Obra(
-                id = document.id,
+                id =obraData["id"] as String?,
                 nome = obraData["nome"] as String,
                 cliente = Cliente(
-                    id = null,
+                    id = (obraData["cliente"] as HashMap<*, *>)["id"] as String?,
                     nome = (obraData["cliente"] as HashMap<*, *>)["nome"] as String,
                     sexo = (obraData["cliente"] as HashMap<*, *>)["sexo"] as String,
                     celular = (obraData["cliente"] as HashMap<*, *>)["celular"] as String,
