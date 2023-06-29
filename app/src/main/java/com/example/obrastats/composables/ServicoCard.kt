@@ -48,7 +48,7 @@ import com.example.obrastats.R
 import java.time.LocalDate
 
 @Composable
-fun ServicoCard(servico: Servico, onEditClicked: () -> Unit) {
+fun ServicoCard(servico: Servico, onEditClicked: () -> Unit, onDeleteClicked: () -> Unit) {
     val context = LocalContext.current
 
     var expanded by remember { mutableStateOf<Boolean>(false) }
@@ -249,5 +249,5 @@ fun ServicoCardPreview() {
         dataInicio = LocalDate.now(),
         situacaoServico = SituacaoServicoEnum.EMANDAMENTO
     )
-    ServicoCard(servico, { })
+    ServicoCard(servico, { }, {})
 }

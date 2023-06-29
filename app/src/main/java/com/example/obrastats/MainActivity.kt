@@ -40,11 +40,14 @@ import androidx.navigation.compose.rememberNavController
 import com.example.obrastats.composables.FormularioCliente
 import com.example.obrastats.composables.FormularioColaborador
 import com.example.obrastats.composables.FormularioObra
+import com.example.obrastats.composables.FormularioServico
 import com.example.obrastats.composables.TelaPrincipalColaboradores
 import com.example.obrastats.composables.TelaPrincipalObras
+import com.example.obrastats.composables.TelaPrincipalServicos
 import com.example.obrastats.viewmodel.ClientesViewModel
 import com.example.obrastats.viewmodel.ColaboradoresViewModel
 import com.example.obrastats.viewmodel.ObrasViewModel
+import com.example.obrastats.viewmodel.ServicosViewModel
 
 
 class MainActivity : ComponentActivity() {
@@ -52,7 +55,7 @@ class MainActivity : ComponentActivity() {
     val clientesViewModel: ClientesViewModel = ClientesViewModel();
     val colaboradoresViewModel: ColaboradoresViewModel = ColaboradoresViewModel();
     val obrasViewModel: ObrasViewModel = ObrasViewModel();
-
+    val servicosViewModel: ServicosViewModel = ServicosViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -86,6 +89,13 @@ class MainActivity : ComponentActivity() {
                         FormularioObra(navController, obrasViewModel, clientesViewModel)
                     }
 
+                    composable("lista-servicos") {
+                        TelaPrincipalServicos(navController, servicosViewModel)
+                    }
+                    composable("criar-editar-servico") {
+                        FormularioServico(navController, servicosViewModel, obrasViewModel)
+                    }
+
                 }
 
             }
@@ -101,7 +111,9 @@ fun MainScreen(navController: NavController, modifier: Modifier = Modifier.fillM
         R.string.clientes to "lista-clientes",
         R.string.obras to "lista-obras",
         R.string.colaboradores to "lista-colaboradores",
-    ).map { MenuItemRouteStringPair(it.first, it.second) }
+        R.string.servicos to "lista-servicos"
+
+        ).map { MenuItemRouteStringPair(it.first, it.second) }
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),

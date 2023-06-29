@@ -25,24 +25,24 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.obrastats.viewmodel.ObrasViewModel
+import com.example.obrastats.viewmodel.ServicosViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TelaPrincipalServicos(navController: NavController, obrasVM: ObrasViewModel) {
+fun TelaPrincipalServicos(navController: NavController, servicosVM: ServicosViewModel) {
 
-    val obrasState = obrasVM.obras.collectAsState(initial = mutableListOf())
+    val servicosState = servicosVM.servicos.collectAsState(initial = mutableListOf())
     val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         scope.launch {
-            obrasVM.getObras()
+            servicosVM.getServicos()
         }
     }
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Obras") },
+                title = { Text(text = "Serviços") },
                 navigationIcon = {
                     IconButton(onClick = {navController.navigate("home") }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
@@ -56,14 +56,14 @@ fun TelaPrincipalServicos(navController: NavController, obrasVM: ObrasViewModel)
                     .fillMaxSize()
                     .padding(paddingValues),
             ) {
-                ListaObras(navController, obrasState.value, obrasVM)
+                ListaServicos(navController, servicosState.value, servicosVM)
             }
         },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    obrasVM.setSelectedId(null);
-                    navController.navigate("criar-editar-obra") },
+                    servicosVM.setSelectedId(null);
+                    navController.navigate("criar-editar-servico") },
                 modifier = Modifier
                     .padding(16.dp),
             ) {
