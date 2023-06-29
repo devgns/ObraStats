@@ -1,13 +1,13 @@
 package com.example.obrastats.classes
 import com.example.obrastats.enums.SituacaoServicoEnum
-import java.util.Date
+import java.time.LocalDate
 
 class Servico(
-    val id: String?,
+    var id: String?,
     val descricao: String,
     val obra: Obra,
     val valorEstimado: Double?,
-    val dataInicio: Date,
+    val dataInicio: LocalDate,
     val situacaoServico: SituacaoServicoEnum
 ) {
 

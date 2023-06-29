@@ -1,6 +1,6 @@
 package com.example.obrastats.classes
 data class  Cliente(
-    val id: String?,
+    var id: String?,
     val nome: String,
     val sexo: String,
     val celular: String,

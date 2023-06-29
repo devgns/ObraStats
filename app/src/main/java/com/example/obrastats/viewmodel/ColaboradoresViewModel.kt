@@ -68,11 +68,16 @@ class ColaboradoresViewModel {
         if (colaborador.id != null) {
             db.collection("colaborador").document(colaborador.id).set(colaboradorMap)
                 .addOnCompleteListener {
-
+                    Log.i("sucess", "Colaborador atualizado com sucesso")
+                }.addOnFailureListener { e ->
+                    Log.i("erro","Erro ao atualizar colaborador: $e")
                 }
         } else {
             db.collection("colaborador").document().set(colaboradorMap)
                 .addOnCompleteListener {
+                    Log.i("sucess", "Colaborador cadastrado com sucesso")
+                }.addOnFailureListener { e ->
+                    Log.i("erro","Erro ao cadastrar colaborador: $e")
                 }
         }
     }

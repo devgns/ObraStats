@@ -45,6 +45,7 @@ import com.example.obrastats.viewmodel.ClientesViewModel
 import java.util.Date
 import androidx.compose.ui.res.painterResource
 import com.example.obrastats.R
+import java.time.LocalDate
 
 @Composable
 fun ServicoCard(servico: Servico, onEditClicked: () -> Unit) {
@@ -104,7 +105,6 @@ fun ServicoCard(servico: Servico, onEditClicked: () -> Unit) {
                     )
                 }
             }
-
         }
         if (expanded) {
             Divider(modifier = Modifier.padding(vertical = 8.dp))
@@ -246,7 +246,7 @@ fun ServicoCardPreview() {
         descricao = "Serviço de pintura",
         obra = obra,
         valorEstimado = 1500.0,
-        dataInicio = Date(),
+        dataInicio = LocalDate.now(),
         situacaoServico = SituacaoServicoEnum.EMANDAMENTO
     )
     ServicoCard(servico, { })

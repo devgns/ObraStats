@@ -6,6 +6,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.util.UUID
 
 
 class ClientesViewModel {
@@ -51,7 +52,13 @@ class ClientesViewModel {
     }
 
     fun salvarCliente(cliente: Cliente) {
+        val originalId = cliente.id
+        if (cliente.id == null) {
+            val uuid = UUID.randomUUID().toString();
+            cliente.id = uuid
+        }
         val clientMap = hashMapOf(
+            "id" to cliente.id,
             "nome" to cliente.nome,
             "sexo" to cliente.sexo,
             "celular" to cliente.celular,
@@ -61,15 +68,24 @@ class ClientesViewModel {
             "cpfCnpj" to cliente.cpfCnpj
         )
 
-        if (cliente.id != null) {
-            db.collection("cliente").document(cliente.id).set(cliente)
-                .addOnCompleteListener {
+
+        db.collection("cliente").document(cliente.id as String).set(cliente)
+            .addOnCompleteListener {
+                if (originalId != null) {
+                    Log.i("sucess", "Cliente atualizado com sucesso")
+                } else {
+                    Log.i("sucess", "Cliente criado com sucesso")
 
                 }
-        } else {
-            db.collection("cliente").document().set(cliente)
-                .addOnCompleteListener {
+
+            }.addOnFailureListener { e ->
+                if (originalId != null) {
+                    Log.i("erro", "Erro ao atualizar cliente: $e")
+                } else {
+                    Log.i("erro", "Erro ao cadastrar cliente: $e")
+
                 }
-        }
+            }
     }
 }
+
