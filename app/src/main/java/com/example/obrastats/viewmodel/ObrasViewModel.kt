@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
+import java.util.UUID
 
 class ObrasViewModel {
     private val db = FirebaseFirestore.getInstance()
@@ -53,8 +54,14 @@ class ObrasViewModel {
     }
 
     fun salvarObra(obra: Obra) {
+        val originalId = obra.id
+        if (obra.id == null) {
+            val uuid = UUID.randomUUID().toString();
+            obra.id = uuid
+        }
 
         val obraMap = hashMapOf(
+            "id" to obra.id,
             "nome" to obra.nome,
             "cliente" to hashMapOf(
                 "id" to obra.cliente.id,
@@ -68,21 +75,22 @@ class ObrasViewModel {
             "cidade" to obra.cidade,
             "endereco" to obra.endereco
         )
-        if (obra.id != null) {
-            db.collection("obra").document(obra.id).set(obraMap)
-                .addOnCompleteListener {
+
+
+        db.collection("obra").document(obra.id as String).set(obraMap)
+            .addOnCompleteListener {
+                if (originalId != null) {
                     Log.i("sucess", "Obra atualizada com sucesso")
-                }.addOnFailureListener { e ->
-                    Log.i("erro", "Erro ao atualizar a obra: $e")
-                }
-        } else {
-            db.collection("obra").add(obraMap)
-                .addOnCompleteListener {
+                } else {
                     Log.i("sucess", "Obra criada com sucesso")
-                }.addOnFailureListener { e ->
-                    Log.i("erro", "Erro ao salvar o obra: $e")
                 }
-        }
+            }.addOnFailureListener { e ->
+                if (originalId != null) {
+                    Log.i("erro", "Erro ao atualizar obra: $e")
+                } else {
+                    Log.i("erro", "Erro ao cadastrar obra: $e")
+                }
+            }
     }
 }
 

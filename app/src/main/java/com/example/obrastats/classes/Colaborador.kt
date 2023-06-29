@@ -3,7 +3,7 @@ package com.example.obrastats.classes
 import com.example.obrastats.enums.ModeloDeContratacaoEnum
 
 data class Colaborador(
-    val id: String?,
+    var id: String?,
     val nome: String,
     val profissao: String,
     val modeloDeContrato: ModeloDeContratacaoEnum,

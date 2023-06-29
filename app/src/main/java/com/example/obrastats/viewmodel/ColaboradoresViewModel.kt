@@ -7,6 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.util.UUID
 
 class ColaboradoresViewModel {
     private val db = FirebaseFirestore.getInstance()
@@ -53,8 +54,14 @@ class ColaboradoresViewModel {
 
 
     fun salvarColaborador(colaborador: Colaborador) {
+        val originalId = colaborador.id
+        if (colaborador.id == null) {
+            val uuid = UUID.randomUUID().toString();
+            colaborador.id = uuid
+        }
 
         val colaboradorMap = hashMapOf(
+            "id" to colaborador.id,
             "nome" to colaborador.nome,
             "profissao" to colaborador.profissao,
             "modeloDeContrato" to colaborador.modeloDeContrato,
@@ -65,20 +72,21 @@ class ColaboradoresViewModel {
             "endereco" to colaborador.endereco,
             "cpfCnpj" to colaborador.cpfCnpj
         )
-        if (colaborador.id != null) {
-            db.collection("colaborador").document(colaborador.id).set(colaboradorMap)
-                .addOnCompleteListener {
+
+
+        db.collection("colaborador").document(colaborador.id as String).set(colaboradorMap)
+            .addOnCompleteListener {
+                if (originalId != null) {
                     Log.i("sucess", "Colaborador atualizado com sucesso")
-                }.addOnFailureListener { e ->
-                    Log.i("erro","Erro ao atualizar colaborador: $e")
+                } else {
+                    Log.i("sucess", "Colaborador criado com sucesso")
                 }
-        } else {
-            db.collection("colaborador").document().set(colaboradorMap)
-                .addOnCompleteListener {
-                    Log.i("sucess", "Colaborador cadastrado com sucesso")
-                }.addOnFailureListener { e ->
-                    Log.i("erro","Erro ao cadastrar colaborador: $e")
+            }.addOnFailureListener { e ->
+                if (originalId != null) {
+                    Log.i("erro", "Erro ao atualizar Colaborador: $e")
+                } else {
+                    Log.i("erro", "Erro ao cadastrar Colaborador: $e")
                 }
-        }
+            }
     }
 }

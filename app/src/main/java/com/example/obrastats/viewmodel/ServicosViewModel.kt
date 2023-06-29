@@ -115,12 +115,6 @@ class ServicosViewModel {
 
         Log.i("servico", "Chamou o banco de dados -> " + servicoMap.toString())
 
-//        db.collection("servico").add(servicoMap)
-//            .addOnCompleteListener {
-//                Log.i("sucess", "Servico criada com sucesso")
-//            }.addOnFailureListener { e ->
-//                Log.i("erro", "Erro ao salvar o Servico: $e")
-//            }
 
         db.collection("servico").document(servico.id as String).set(servicoMap)
             .addOnCompleteListener {
