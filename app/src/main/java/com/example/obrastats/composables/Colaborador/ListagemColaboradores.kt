@@ -1,11 +1,10 @@
-package com.example.obrastats.composables
+package com.example.obrastats.composables.Colaborador
 
 import android.util.Log
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavController
 import com.example.obrastats.classes.Colaborador
 import com.example.obrastats.viewmodel.ColaboradoresViewModel

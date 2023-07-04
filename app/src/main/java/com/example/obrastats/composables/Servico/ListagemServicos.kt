@@ -1,4 +1,4 @@
-package com.example.obrastats.composables
+package com.example.obrastats.composables.Servico
 
 import android.util.Log
 import androidx.compose.foundation.lazy.LazyColumn

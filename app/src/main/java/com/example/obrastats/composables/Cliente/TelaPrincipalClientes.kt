@@ -1,4 +1,5 @@
-package com.example.obrastats.composables
+package com.example.obrastats.composables.Cliente
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Alignment
 import androidx.compose.material.*
@@ -17,28 +18,32 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.obrastats.viewmodel.ObrasViewModel
+import androidx.navigation.compose.rememberNavController
+import com.example.obrastats.viewmodel.ClientesViewModel
 import kotlinx.coroutines.launch
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TelaPrincipalObras(navController: NavController, obrasVM: ObrasViewModel) {
+fun TelaPrincipalClientes(navController: NavController, clientesVM: ClientesViewModel) {
 
-    val obrasState = obrasVM.obras.collectAsState(initial = mutableListOf())
+    val clientesState = clientesVM.clientes.collectAsState(initial = mutableListOf())
     val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         scope.launch {
-            obrasVM.getObras()
+            clientesVM.getClientes()
         }
     }
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Obras") },
+                title = { Text(text = "Clientes") },
                 navigationIcon = {
-                    IconButton(onClick = {navController.navigate("home") }) {
+                    IconButton(onClick = { navController.navigate("home") }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
                     }
                 }
@@ -49,18 +54,24 @@ fun TelaPrincipalObras(navController: NavController, obrasVM: ObrasViewModel) {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues),
-            ) {
-                ListaObras(navController, obrasState.value, obrasVM)
+
+                ) {
+                ListaClientes(navController,clientesState.value ,clientesVM)
+
             }
+
+
         },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    obrasVM.setSelectedId(null);
-                    navController.navigate("criar-editar-obra") },
+                    clientesVM.setSelectedId(null);
+                    navController.navigate("criar-editar-cliente")
+                },
                 modifier = Modifier
                     .padding(16.dp),
-            ) {
+
+                ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding(horizontal = 6.dp)
@@ -73,11 +84,10 @@ fun TelaPrincipalObras(navController: NavController, obrasVM: ObrasViewModel) {
     )
 }
 
+@Preview
+@Composable
+fun TelaPrincipalClientesPreview() {
+    val navController = rememberNavController()
 
-
-//@Preview
-//@Composable
-//fun TelaPrincipalObrasPreview() {
-//    TelaPrincipalObras()
-//}
-
+    TelaPrincipalClientes(navController, ClientesViewModel())
+}

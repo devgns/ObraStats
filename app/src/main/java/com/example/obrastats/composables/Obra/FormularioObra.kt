@@ -1,4 +1,4 @@
-package com.example.obrastats.composables
+package com.example.obrastats.composables.Obra
 
 import android.util.Log
 import android.widget.Toast
@@ -24,7 +24,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -36,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.obrastats.classes.Cliente
 import com.example.obrastats.classes.Obra
+import com.example.obrastats.composables.dropDownForm
 import com.example.obrastats.viewmodel.ClientesViewModel
 import com.example.obrastats.viewmodel.ObrasViewModel
 import kotlinx.coroutines.Dispatchers
@@ -147,14 +147,14 @@ fun FormularioObra(navController: NavController, obrasVM: ObrasViewModel, client
                             if (obraSelecionada != null) {
                                 Toast.makeText(
                                     context,
-                                    "Obra cadastrada com sucesso",
+                                    "Obra atualizada com sucesso",
                                     Toast.LENGTH_LONG
                                 )
                                     .show()
                             } else {
                                 Toast.makeText(
                                     context,
-                                    "Obra atualizada com sucesso",
+                                    "Obra cadastrada com sucesso",
                                     Toast.LENGTH_LONG
                                 )
                                     .show()

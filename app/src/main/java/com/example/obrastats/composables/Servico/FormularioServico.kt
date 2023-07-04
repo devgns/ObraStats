@@ -1,4 +1,4 @@
-package com.example.obrastats.composables
+package com.example.obrastats.composables.Servico
 
 import android.util.Log
 import android.widget.Toast
@@ -44,6 +44,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import com.example.obrastats.classes.Servico
+import com.example.obrastats.composables.dropDownForm
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -186,14 +187,14 @@ fun FormularioServico(
                             if (servicoSelecionado != null) {
                                 Toast.makeText(
                                     context,
-                                    "Serviço cadastrado com sucesso",
+                                    "Serviço atualizado com sucesso",
                                     Toast.LENGTH_LONG
                                 )
                                     .show()
                             } else {
                                 Toast.makeText(
                                     context,
-                                    "Serviço atualizado com sucesso",
+                                    "Serviço cadatrado com sucesso",
                                     Toast.LENGTH_LONG
                                 )
                                     .show()

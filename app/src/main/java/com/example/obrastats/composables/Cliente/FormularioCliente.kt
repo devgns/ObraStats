@@ -1,6 +1,5 @@
-package com.example.obrastats.composables
+package com.example.obrastats.composables.Cliente
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,54 +27,57 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.obrastats.classes.Colaborador
-import com.example.obrastats.enums.ModeloDeContratacaoEnum
-import com.example.obrastats.viewmodel.ColaboradoresViewModel
+import androidx.navigation.compose.rememberNavController
+import com.example.obrastats.classes.Cliente
+import com.example.obrastats.composables.dropDownForm
+import com.example.obrastats.viewmodel.ClientesViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FormularioColaborador(
-    navController: NavController,
-    colaboradoresVM: ColaboradoresViewModel
-) {
-    var colaboradorSelecionado = colaboradoresVM.getColaboradorSelecionado()
+fun FormularioCliente(navController: NavController, clientesVM: ClientesViewModel) {
 
+    val clienteSelecionado = clientesVM.getClienteSelecionado();
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
+    val idState = remember { mutableStateOf("") }
     val nomeState = remember { mutableStateOf("") }
-    val profissaoState = remember { mutableStateOf("") }
-    val modeloContratoState = remember { mutableStateOf<ModeloDeContratacaoEnum?>(null) }
-    val sexoState = remember { mutableStateOf<String?>(null) }
     val cpfCnpjState = remember { mutableStateOf<String?>("") }
+    val sexoState = remember { mutableStateOf<String?>(null) }
     val celularState = remember { mutableStateOf("") }
     val emailState = remember { mutableStateOf("") }
     val cidadeState = remember { mutableStateOf("") }
     val enderecoState = remember { mutableStateOf("") }
-    val listaSexos = listOf("Masculino", "Feminino");
 
-    if (colaboradorSelecionado != null) {
-        nomeState.value = colaboradorSelecionado.nome
-        profissaoState.value = colaboradorSelecionado.profissao
-        modeloContratoState.value = colaboradorSelecionado.modeloDeContrato
-        sexoState.value = colaboradorSelecionado.sexo
-        cpfCnpjState.value = colaboradorSelecionado.cpfCnpj ?: ""
-        celularState.value = colaboradorSelecionado.celular
-        emailState.value = colaboradorSelecionado.email
-        cidadeState.value = colaboradorSelecionado.cidade
-        enderecoState.value = colaboradorSelecionado.endereco
+    val isEmailTouched = remember { mutableStateOf(false) }
+
+    val listaSexos = listOf("Masculino", "Feminino")
+
+    if (clienteSelecionado != null) {
+
+        idState.value = clienteSelecionado.id as String
+        nomeState.value = clienteSelecionado.nome
+        cpfCnpjState.value = clienteSelecionado.cpfCnpj ?: ""
+        sexoState.value = clienteSelecionado.sexo
+        celularState.value = clienteSelecionado.celular
+        emailState.value = clienteSelecionado.email
+        cidadeState.value = clienteSelecionado.cidade
+        enderecoState.value = clienteSelecionado.endereco
     }
+
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = if (colaboradorSelecionado != null) "Atualizar colaborador" else "Cadastrar colaborador") },
+                title = { Text(text = if (clienteSelecionado != null) "Atualizar cliente" else "Cadastrar cliente") },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigate("lista-colaboradores") }) {
+                    IconButton(onClick = { navController.navigate("lista-clientes") }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
                     }
                 }
@@ -86,36 +88,20 @@ fun FormularioColaborador(
                 modifier = Modifier
                     .padding(paddingValues)
                     .padding(16.dp)
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(
+                        rememberScrollState()
+                    ),
             ) {
-                Text("Cadastro de Colaborador", style = TextStyle(fontSize = 20.sp))
+                Text("Cadastro de Cliente", style = TextStyle(fontSize = 20.sp))
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 OutlinedTextField(
-                    value = nomeState.value,
+                    value = nomeState.value.toString(),
                     onValueChange = { value -> nomeState.value = value },
                     label = { Text("Nome") },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp)
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-
-                OutlinedTextField(
-                    value = profissaoState.value,
-                    onValueChange = { value -> profissaoState.value = value },
-                    label = { Text("Profissão") },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp)
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Formulário de Modelo de Contratação
-                dropDownForm(
-                    ModeloDeContratacaoEnum.values().toList(),
-                    placeHolder = "Modelo de Contratação",
-                    selectedItem = modeloContratoState,
-                    itemToString = { it?.descricao ?: "" }
+                    shape = RoundedCornerShape(12.dp),
                 )
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -127,21 +113,19 @@ fun FormularioColaborador(
                         itemToString = { it }
                     )
                 }
-
                 Spacer(modifier = Modifier.height(16.dp))
                 val maxLength = 14 // O comprimento máximo permitido para CPF ou CNPJ formatado
                 OutlinedTextField(
                     value = cpfCnpjState.value.toString(),
                     onValueChange = { value ->
-                        if (value.length <= maxLength) {
-                            cpfCnpjState.value = value
-                        }
+                        cpfCnpjState.value = value
                     },
                     label = { Text("CPF ou CNPJ") },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                 )
                 Spacer(modifier = Modifier.height(16.dp))
+
 
                 OutlinedTextField(
                     value = celularState.value,
@@ -150,15 +134,23 @@ fun FormularioColaborador(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp)
                 )
+
                 Spacer(modifier = Modifier.height(16.dp))
 
                 OutlinedTextField(
                     value = emailState.value,
-                    onValueChange = { value -> emailState.value = value },
+                    onValueChange = { value ->
+                        emailState.value = value
+                        if (!isEmailTouched.value) {
+                            isEmailTouched.value = true
+                        }
+                    },
                     label = { Text("Email") },
+                    isError = isEmailTouched.value && !isEmailValid(emailState.value),
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                 )
+
                 Spacer(modifier = Modifier.height(16.dp))
 
                 OutlinedTextField(
@@ -167,7 +159,9 @@ fun FormularioColaborador(
                     label = { Text("Cidade") },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
-                )
+
+                    )
+
                 Spacer(modifier = Modifier.height(16.dp))
 
                 OutlinedTextField(
@@ -176,16 +170,16 @@ fun FormularioColaborador(
                     label = { Text("Endereço") },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
-                )
+
+                    )
+
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
                     onClick = {
-                        var colaborador = Colaborador(
-                            if (colaboradorSelecionado != null) colaboradorSelecionado.id else null,
+                        val cliente = Cliente(
+                            if (clienteSelecionado != null) clienteSelecionado.id else null,
                             nomeState.value,
-                            profissaoState.value,
-                            modeloContratoState.value ?: ModeloDeContratacaoEnum.DIARISTA,
                             sexoState.value ?: "",
                             celularState.value,
                             emailState.value,
@@ -194,22 +188,21 @@ fun FormularioColaborador(
                             cpfCnpjState.value
                         )
                         scope.launch(Dispatchers.IO) {
-
-                            colaboradoresVM.salvarColaborador(colaborador);
-
+                            clientesVM.salvarCliente(cliente);
                         }
+
                         scope.launch(Dispatchers.Main) {
-                            if (colaboradorSelecionado != null) {
+                            if (clienteSelecionado != null) {
                                 Toast.makeText(
                                     context,
-                                    "Colaborador cadastrado com sucesso",
+                                    "Cliente atualizado com sucesso",
                                     Toast.LENGTH_LONG
                                 )
                                     .show()
                             } else {
                                 Toast.makeText(
                                     context,
-                                    "Colaborador atualizado com sucesso",
+                                    "Cliente cadastrado com sucesso",
                                     Toast.LENGTH_LONG
                                 )
                                     .show()
@@ -217,19 +210,29 @@ fun FormularioColaborador(
                             navController.popBackStack()
                         }
                     },
-                    enabled = nomeState.value.isNotBlank() && profissaoState.value.isNotBlank() && (sexoState.value?.isNotBlank() == true) && modeloContratoState.value != null && celularState.value.isNotBlank() && emailState.value.isNotBlank() && cidadeState.value.isNotBlank() && enderecoState.value.isNotBlank(),
+                    enabled = isEmailValid(emailState.value) && nomeState.value.isNotBlank() && celularState.value.isNotBlank() && cidadeState.value.isNotBlank() && enderecoState.value.isNotBlank(),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = if (colaboradorSelecionado != null) "Atualizar" else "Cadastrar")
+                    Text(text = if (clienteSelecionado != null) "Atualizar" else "Cadastrar")
                 }
             }
-        })
+        },
+    )
 
 }
 
+fun isEmailValid(email: String): Boolean {
+    // Implemente aqui a validação específica para o campo de email
+    // Exemplo básico: Verificar se o email possui um formato válido usando regex
+    val emailRegex = "[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}".toRegex()
+    return email.matches(emailRegex)
+}
 
-//@Preview(showBackground = true)
-//@Composable
-//fun ColaboradorFormularioPreview() {
-//    FormularioColaborador({})
-//}
+
+@Preview(showBackground = true)
+@Composable
+fun FormularioClientePreview() {
+    val clientesViewModel: ClientesViewModel = ClientesViewModel();
+    val navController = rememberNavController()
+    FormularioCliente(navController, clientesViewModel)
+}

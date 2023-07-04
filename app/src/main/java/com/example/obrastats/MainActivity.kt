@@ -19,32 +19,29 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-//import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.obrastats.composables.TelaPrincipalClientes
+import com.example.obrastats.composables.Cliente.TelaPrincipalClientes
 import com.example.obrastats.ui.theme.ObraStatsTheme
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.example.obrastats.composables.FormularioCliente
-import com.example.obrastats.composables.FormularioColaborador
-import com.example.obrastats.composables.FormularioObra
-import com.example.obrastats.composables.FormularioServico
+import com.example.obrastats.composables.Cliente.FormularioCliente
+import com.example.obrastats.composables.Colaborador.FormularioColaborador
+import com.example.obrastats.composables.Obra.FormularioObra
+import com.example.obrastats.composables.Servico.FormularioServico
 import com.example.obrastats.composables.TelaEmDesenvolvimento
-import com.example.obrastats.composables.TelaPrincipalColaboradores
-import com.example.obrastats.composables.TelaPrincipalObras
-import com.example.obrastats.composables.TelaPrincipalServicos
+import com.example.obrastats.composables.Colaborador.TelaPrincipalColaboradores
+import com.example.obrastats.composables.Obra.TelaPrincipalObras
+import com.example.obrastats.composables.Servico.TelaPrincipalServicos
 import com.example.obrastats.viewmodel.ClientesViewModel
 import com.example.obrastats.viewmodel.ColaboradoresViewModel
 import com.example.obrastats.viewmodel.ObrasViewModel
@@ -109,8 +106,6 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen(navController: NavController, modifier: Modifier = Modifier.fillMaxHeight()) {
-    val selectedItem = remember { mutableStateOf(-1) }
-
     val menuItems = listOf(
         R.string.clientes to "lista-clientes",
         R.string.obras to "lista-obras",

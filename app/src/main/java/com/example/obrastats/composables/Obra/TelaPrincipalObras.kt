@@ -1,10 +1,4 @@
-package com.example.obrastats.composables
-
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-
+package com.example.obrastats.composables.Obra
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Alignment
 import androidx.compose.material.*
@@ -25,24 +19,24 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.obrastats.viewmodel.ServicosViewModel
+import com.example.obrastats.viewmodel.ObrasViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TelaPrincipalServicos(navController: NavController, servicosVM: ServicosViewModel) {
+fun TelaPrincipalObras(navController: NavController, obrasVM: ObrasViewModel) {
 
-    val servicosState = servicosVM.servicos.collectAsState(initial = mutableListOf())
+    val obrasState = obrasVM.obras.collectAsState(initial = mutableListOf())
     val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         scope.launch {
-            servicosVM.getServicos()
+            obrasVM.getObras()
         }
     }
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Serviços") },
+                title = { Text(text = "Obras") },
                 navigationIcon = {
                     IconButton(onClick = {navController.navigate("home") }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
@@ -56,14 +50,14 @@ fun TelaPrincipalServicos(navController: NavController, servicosVM: ServicosView
                     .fillMaxSize()
                     .padding(paddingValues),
             ) {
-                ListaServicos(navController, servicosState.value, servicosVM)
+                ListaObras(navController, obrasState.value, obrasVM)
             }
         },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    servicosVM.setSelectedId(null);
-                    navController.navigate("criar-editar-servico") },
+                    obrasVM.setSelectedId(null);
+                    navController.navigate("criar-editar-obra") },
                 modifier = Modifier
                     .padding(16.dp),
             ) {
@@ -78,3 +72,12 @@ fun TelaPrincipalServicos(navController: NavController, servicosVM: ServicosView
         }
     )
 }
+
+
+
+//@Preview
+//@Composable
+//fun TelaPrincipalObrasPreview() {
+//    TelaPrincipalObras()
+//}
+

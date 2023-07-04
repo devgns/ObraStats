@@ -1,6 +1,5 @@
-package com.example.obrastats.composables
+package com.example.obrastats.composables.Colaborador
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Alignment
 import androidx.compose.material.*
@@ -21,6 +20,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.obrastats.composables.Colaborador.ListaColaboradores
 import com.example.obrastats.viewmodel.ColaboradoresViewModel
 import kotlinx.coroutines.launch
 

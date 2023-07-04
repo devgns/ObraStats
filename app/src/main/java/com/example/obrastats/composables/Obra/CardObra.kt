@@ -1,4 +1,4 @@
-package com.example.obrastats.composables
+package com.example.obrastats.composables.Obra
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,11 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.obrastats.classes.Colaborador
+import com.example.obrastats.classes.Obra
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ColaboradorCard(colaborador: Colaborador, onEditClicked: () -> Unit) {
+fun ObraCard(obra: Obra, onEditClicked: () -> Unit) {
     Card(
         modifier = Modifier.padding(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
@@ -32,7 +32,7 @@ fun ColaboradorCard(colaborador: Colaborador, onEditClicked: () -> Unit) {
                 verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
             ) {
                 Text(
-                    text = colaborador.nome,
+                    text = obra.nome,
                     fontSize = 20.sp,
                     color = Color.Blue,
                     modifier = Modifier.weight(1f)
@@ -42,38 +42,35 @@ fun ColaboradorCard(colaborador: Colaborador, onEditClicked: () -> Unit) {
                 ) {
                     Icon(
                         imageVector = Icons.Default.Edit,
-                        contentDescription = "Editar colaborador"
+                        contentDescription = "Editar obra"
                     )
                 }
             }
-            Text(text = "Profissão: ${colaborador.profissao}")
-            Text(text = "Modelo de Contrato: ${colaborador.modeloDeContrato}")
-            Text(text = "Sexo: ${colaborador.sexo}")
-            if (colaborador.cpfCnpj != null) {
-                Text(text = "CPF / CNPJ: ${colaborador.cpfCnpj}")
-            }
-            Text(text = "Celular: ${colaborador.celular}")
-            Text(text = "Email: ${colaborador.email}")
-            Text(text = "Cidade: ${colaborador.cidade}")
-            Text(text = "Endereço: ${colaborador.endereco}")
+            Text(text = "Cliente: ${obra.cliente.nome}")
+            Text(text = "Cidade: ${obra.cidade}")
+            Text(text = "Endereço: ${obra.endereco}")
         }
     }
 }
 
 //@Preview
 //@Composable
-//fun ColaboradorCardPreview() {
-//    ColaboradorCard(
-//        Colaborador(
+//fun ObraCardPreview() {
+//    ObraCard(
+//        Obra(
 //            null,
-//            "João",
-//            "Eletricista",
-//            ModeloDeContratacaoEnum.DIARISTA,
-//            "Masculino",
-//            "34999999999",
-//            "joao@email.com",
+//            "Obra 1",
+//            Cliente(
+//                null,
+//                "Cliente 1",
+//                "Feminino",
+//                "34999999999",
+//                "cliente1@email.com",
+//                "Uberaba",
+//                "Rua A"
+//            ),
 //            "Uberaba",
-//            "Rua Feliz"
+//            "Rua B"
 //        )
 //    )
 //}

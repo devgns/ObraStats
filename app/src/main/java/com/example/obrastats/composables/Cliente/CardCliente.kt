@@ -1,4 +1,4 @@
-package com.example.obrastats.composables
+package com.example.obrastats.composables.Cliente
 
 import androidx.compose.foundation.layout.*
 
